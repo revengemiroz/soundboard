@@ -48,6 +48,7 @@ export default function SoundList() {
             searchedSounds.map((sound) => (
               <SoundCard
                 key={sound._id}
+                id={sound._id}
                 title={sound.title}
                 category={sound.category}
                 fileId={sound.fileId}

@@ -7,21 +7,31 @@ import { useQuery } from "convex/react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Id } from "@/convex/_generated/dataModel";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface SoundCardProps {
   title: string;
+  id: Id<"sounds">;
   category: string;
   fileId: Id<"_storage">;
 }
 
-export default function SoundCard({ title, category, fileId }: SoundCardProps) {
+export default function SoundCard({
+  id,
+  title,
+  category,
+  fileId,
+}: SoundCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
 
-  const togglePlay = () => {
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
@@ -29,6 +39,14 @@ export default function SoundCard({ title, category, fileId }: SoundCardProps) {
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
+  };
+
+  const handleDownload = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const link = document.createElement("a");
+    link.href = soundUrl ?? "#";
+    link.download = `${soundUrl}.mp3`;
+    link.click();
   };
 
   useEffect(() => {
@@ -63,8 +81,16 @@ export default function SoundCard({ title, category, fileId }: SoundCardProps) {
     };
   }, [soundUrl]);
 
+  const router = useRouter();
+
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all">
+    <div
+      onClick={() => {
+        router.push(`/sounds/${id}`);
+      }}
+      className="bg-white rounded-xl cursor-pointer shadow-lg p-4 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all"
+    >
+      {/* <Link href={`/sounds/${id}`} className="block"> */}
       {/* Circular Progress Bar for Audio Playback */}
       <div className="w-20 h-20 mb-3">
         <CircularProgressbar
@@ -98,13 +124,12 @@ export default function SoundCard({ title, category, fileId }: SoundCardProps) {
         </button>
 
         {soundUrl && (
-          <a
-            href={soundUrl}
-            download
+          <span
+            onClick={handleDownload}
             className="bg-gray-200 cursor-pointer p-3 rounded-full hover:bg-gray-300"
           >
             <Download size={20} />
-          </a>
+          </span>
         )}
       </div>
 
