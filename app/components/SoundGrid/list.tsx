@@ -6,11 +6,12 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Id } from "@/convex/_generated/dataModel";
 
 interface SoundCardProps {
   title: string;
   category: string;
-  fileId: string;
+  fileId: Id<"_storage">;
 }
 
 export default function SoundCard({ title, category, fileId }: SoundCardProps) {

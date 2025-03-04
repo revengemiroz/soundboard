@@ -19,7 +19,7 @@ export default function SoundList() {
             key={sound._id}
             title={sound.title}
             category={sound.category}
-            fileId={`${sound.fileId}`} // Use Convex Storage URL
+            fileId={sound.fileId}
           />
         ))}
       </div>
