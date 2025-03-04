@@ -92,7 +92,7 @@ export default function SoundCard({ title, category, fileId }: SoundCardProps) {
       <div className="flex items-center gap-4 mt-3">
         <button
           onClick={togglePlay}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full"
+          className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full"
         >
           {isPlaying ? <Pause size={20} /> : <Play size={20} />}
         </button>
@@ -101,7 +101,7 @@ export default function SoundCard({ title, category, fileId }: SoundCardProps) {
           <a
             href={soundUrl}
             download
-            className="bg-gray-200 p-3 rounded-full hover:bg-gray-300"
+            className="bg-gray-200 cursor-pointer p-3 rounded-full hover:bg-gray-300"
           >
             <Download size={20} />
           </a>

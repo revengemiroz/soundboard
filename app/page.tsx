@@ -22,12 +22,12 @@ export default function HomePage() {
         </div>
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
+            {/* <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
               <span>⭐</span> Trending Sounds
-            </h2>
-            <button className="text-blue-500 hover:text-blue-600 text-sm sm:text-base">
+            </h2> */}
+            {/* <button className="text-blue-500 hover:text-blue-600 text-sm sm:text-base">
               See All →
-            </button>
+            </button> */}
           </div>
           <SoundList />
         </div>

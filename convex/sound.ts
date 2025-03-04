@@ -53,3 +53,17 @@ export const getSoundUrl = query({
     return await ctx.storage.getUrl(fileId);
   },
 });
+
+// Search sounds by title (Case-Insensitive)
+export const searchSounds = query({
+  args: { searchTerm: v.string() },
+  handler: async (ctx, { searchTerm }) => {
+    const allSounds = await ctx.db.query("sounds").collect();
+
+    if (!searchTerm) return allSounds;
+
+    return allSounds.filter((sound) =>
+      sound.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  },
+});

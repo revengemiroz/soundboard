@@ -127,3 +127,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.border-green {
+  border: 2px solid green;
+}
