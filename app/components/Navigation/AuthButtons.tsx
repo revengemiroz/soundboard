@@ -5,12 +5,12 @@ export default function AuthButtons() {
   //   if (isAuthenticated) {
   return (
     <div className="hidden md:flex items-center space-x-2">
-      <button
+      {/* <button
         //   onClick={logout}
         className="px-3 py-1.5 text-sm text-white bg-gray-800 hover:bg-gray-900 rounded"
       >
         Logout
-      </button>
+      </button> */}
       <Link
         href="/upload"
         className="px-3 py-1.5 text-sm text-white bg-red-600 hover:bg-red-700 rounded"

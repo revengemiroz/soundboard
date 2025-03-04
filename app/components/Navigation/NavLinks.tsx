@@ -26,15 +26,15 @@ function NavLink({ to, children, isNew }: NavLinkProps) {
 export default function NavLinks() {
   return (
     <div className="hidden md:flex items-center space-x-1">
-      <NavLink to="/">HOME</NavLink>
-      <NavLink to="/new" isNew>
+      {/* <NavLink to="/">HOME</NavLink> */}
+      {/* <NavLink to="/new" isNew>
         NEW
-      </NavLink>
+      </NavLink> */}
       <NavLink to="/trends">TRENDS</NavLink>
       <NavLink to="/categories">CATEGORIES</NavLink>
-      <NavLink to="/create">CREATE</NavLink>
+      {/* <NavLink to="/create">CREATE</NavLink> */}
       <NavLink to="/about">ABOUT</NavLink>
-      {<NavLink to="/admin">ADMIN</NavLink>}
+      {/* {<NavLink to="/admin">ADMIN</NavLink>} */}
     </div>
   );
 }
