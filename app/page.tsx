@@ -1,7 +1,8 @@
+import { ConvexReactClient } from "convex/react";
 import React from "react";
 // import { SEO } from "./components/SEO";
 // import { SearchBar } from "./components/SearchBar";
-// import { SoundGrid } from "./components/SoundGrid";
+import SoundList from "./components/SoundGrid";
 
 export default function HomePage() {
   return (
@@ -28,7 +29,7 @@ export default function HomePage() {
               See All →
             </button>
           </div>
-          {/* <SoundGrid /> */}
+          <SoundList />
         </div>
       </main>
     </>

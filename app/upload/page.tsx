@@ -1,12 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { Upload, AlertCircle } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-// import { useSoundStore } from '../../lib/utils';
-import { validateAudioFile } from "../../lib/utils";
 import { useRouter } from "next/navigation";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -16,43 +15,52 @@ export default function UploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
-  //   const { uploadSound } = useSoundStore();
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: async (acceptedFiles) => {
-      const audioFile = acceptedFiles[0];
-      try {
-        await validateAudioFile(audioFile);
-        setFile(audioFile);
-        setTitle(audioFile.name.replace(/\.[^/.]+$/, ""));
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Invalid audio file");
-      }
-    },
-    accept: {
-      "audio/*": [".mp3", ".wav", ".ogg"],
-    },
-    maxFiles: 1,
-  });
+  // Convex Mutations
+  const generateUploadUrl = useMutation(api.sound.generateUploadUrl);
+  const uploadSound = useMutation(api.sound.uploadSound);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) return;
+    if (!file || !title || !category) {
+      setError("Please fill all fields and select a file.");
+      return;
+    }
 
     setIsUploading(true);
     setError(null);
 
     try {
-      //   await uploadSound(file, {
-      //     title,
-      //     category,
-      //     tags: tags
-      //       .split(",")
-      //       .map((tag) => tag.trim())
-      //       .filter(Boolean),
-      //     status: "pending",
-      //   });
+      // Step 1: Get a temporary upload URL from Convex
+      const uploadUrl = await generateUploadUrl();
+
+      // Step 2: Upload file to Convex Storage
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload file");
+      }
+
+      // Step 3: Get Convex Storage ID
+      const { storageId } = await response.json();
+
+      // Step 4: Save Metadata in Convex Database
+      await uploadSound({
+        title,
+        category,
+        tags: tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+        fileId: storageId, // Store file ID instead of URL
+      });
+
       router.push("/");
     } catch (err) {
       setError("Failed to upload sound");
@@ -60,6 +68,18 @@ export default function UploadPage() {
       setIsUploading(false);
     }
   };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: (acceptedFiles) => {
+      const audioFile = acceptedFiles[0];
+      setFile(audioFile);
+      setTitle(audioFile.name.replace(/\.[^/.]+$/, ""));
+    },
+    accept: {
+      "audio/*": [".mp3", ".wav", ".ogg"],
+    },
+    maxFiles: 1,
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -76,7 +96,7 @@ export default function UploadPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-white p-6 rounded-lg shadow"
+          className="bg-white p-6 rounded-lg shadow space-y-6"
         >
           <div
             {...getRootProps()}
@@ -102,6 +122,7 @@ export default function UploadPage() {
             </div>
           )}
 
+          {/* Title Field */}
           <div>
             <label
               htmlFor="title"
@@ -119,6 +140,7 @@ export default function UploadPage() {
             />
           </div>
 
+          {/* Category Selection */}
           <div>
             <label
               htmlFor="category"
@@ -141,6 +163,7 @@ export default function UploadPage() {
             </select>
           </div>
 
+          {/* Tags Field */}
           <div>
             <label
               htmlFor="tags"
@@ -158,6 +181,7 @@ export default function UploadPage() {
             />
           </div>
 
+          {/* Upload Button */}
           <button
             type="submit"
             disabled={!file || isUploading}
