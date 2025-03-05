@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Play, Pause, Download } from "lucide-react";
+import { Play, Pause, Download, PlusCircle } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -41,12 +41,26 @@ export default function SoundCard({
     setIsPlaying(!isPlaying);
   };
 
-  const handleDownload = (e: React.MouseEvent) => {
+  const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    const link = document.createElement("a");
-    link.href = soundUrl ?? "#";
-    link.download = `${soundUrl}.mp3`;
-    link.click();
+    if (!soundUrl) return;
+
+    try {
+      const response = await fetch(soundUrl);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = title + ".mp3"; // Ensure correct file extension
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading audio:", error);
+    }
   };
 
   useEffect(() => {
@@ -82,6 +96,10 @@ export default function SoundCard({
   }, [soundUrl]);
 
   const router = useRouter();
+
+  const addToSoundBoard = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   return (
     <div
@@ -129,6 +147,15 @@ export default function SoundCard({
             className="bg-gray-200 cursor-pointer p-3 rounded-full hover:bg-gray-300"
           >
             <Download size={20} />
+          </span>
+        )}
+
+        {soundUrl && (
+          <span
+            onClick={addToSoundBoard}
+            className="bg-gray-200 cursor-pointer p-3 rounded-full hover:bg-gray-300"
+          >
+            <PlusCircle size={20} />
           </span>
         )}
       </div>

@@ -1,5 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface NavLinkProps {
   to: string;
@@ -31,7 +39,25 @@ export default function NavLinks() {
         NEW
       </NavLink> */}
       <NavLink to="/trends">TRENDS</NavLink>
-      <NavLink to="/categories">CATEGORIES</NavLink>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="link"
+            className="flex items-center cursor-pointer no-underline text-sm font-medium uppercase"
+          >
+            Categories
+            <ChevronDown className="ml-1 h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-48">
+          <DropdownMenuItem>Fashion</DropdownMenuItem>
+          <DropdownMenuItem>Technology</DropdownMenuItem>
+          <DropdownMenuItem>Home & Living</DropdownMenuItem>
+          <DropdownMenuItem>Sports & Outdoors</DropdownMenuItem>
+          <DropdownMenuItem>Beauty & Health</DropdownMenuItem>
+          <DropdownMenuItem>Books & Media</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       {/* <NavLink to="/create">CREATE</NavLink> */}
       <NavLink to="/about">ABOUT</NavLink>
       {/* {<NavLink to="/admin">ADMIN</NavLink>} */}

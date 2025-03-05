@@ -48,52 +48,79 @@ export default function SoundDetailsPage() {
     setIsPlaying(!isPlaying);
   };
 
+  const handleDownload = async () => {
+    if (!sound?.fileUrl) return;
+
+    try {
+      const response = await fetch(sound.fileUrl);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = sound.title + ".mp3"; // Ensure correct file extension
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading audio:", error);
+    }
+  };
+
+  console.log({ sound });
+
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4">
-      <Link href="/" className="cursor-pointer">
-        <button className="flex items-center text-gray-600 hover:text-indigo-600 mb-4">
+    <div className="max-w-4xl mx-auto py-10 px-4 ">
+      <Link href="/">
+        <button className="flex items-center cursor-pointer text-gray-600 hover:text-indigo-600 mb-4">
           <ArrowLeft size={18} className="mr-2" />
           Back to sounds
         </button>
       </Link>
 
-      <div className="bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-bold">{sound.title}</h1>
-        <p className="text-gray-500 mb-2">
+      <div className="bg-white shadow-lg rounded-lg p-6 border">
+        <h1 className="text-2xl font-bold capitalize">{sound.title}</h1>
+        <p className="text-gray-500 mb-6">
           {sound.category} • {new Date(sound.createdAt).toLocaleDateString()}
         </p>
 
         {/* Audio Player & Visualizer */}
-        <div className="bg-gray-100 rounded-md p-6 flex flex-col items-center">
+        <div className="bg-gray-100 relative border rounded-md p-6 flex flex-col justify-center items-center">
           <button
             onClick={togglePlay}
-            className="bg-blue-500 text-white p-3 rounded-full hover:bg-blue-600 mb-4"
+            className="bg-blue-500 cursor-pointer z-9 text-white p-3 rounded-full hover:bg-blue-600 my-12"
           >
             {isPlaying ? <Pause size={24} /> : <Play size={24} />}
           </button>
 
           {/* Real Audio Visualizer */}
-          <AudioVisualizer
-            audioRef={audioRef as React.RefObject<HTMLAudioElement>}
-            isPlaying={isPlaying}
-          />
+          {/* <div className="absolute bottom-0 w-fit overflow-hidden">
+            <AudioVisualizer
+              audioRef={audioRef as React.RefObject<HTMLAudioElement>}
+              isPlaying={isPlaying}
+            />
+          </div> */}
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-4 mt-6">
-          <button className="flex items-center text-gray-600 hover:text-indigo-600">
+          <button
+            onClick={() => navigator.clipboard.writeText("a")}
+            className="flex cursor-pointer items-center text-gray-600 hover:text-indigo-600"
+          >
             <Share size={20} className="mr-2" />
             Share
           </button>
           {sound.fileUrl && (
-            <a
-              href={sound.fileUrl}
-              download
-              className="flex items-center text-gray-600 hover:text-indigo-600"
+            <button
+              onClick={handleDownload}
+              className="flex cursor-pointer items-center text-gray-600 hover:text-indigo-600"
             >
               <Download size={20} className="mr-2" />
               Download
-            </a>
+            </button>
           )}
         </div>
 

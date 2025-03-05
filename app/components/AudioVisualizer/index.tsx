@@ -103,7 +103,7 @@ export function AudioVisualizer({ audioRef, isPlaying }: AudioVisualizerProps) {
   return (
     <canvas
       ref={canvasRef}
-      className="min-w-full h-[100px] bg-gray-100 rounded-md"
+      className="max-w-1/3 h-[100px] bg-gray-100 rounded-md"
     />
   );
 }
