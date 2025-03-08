@@ -52,8 +52,9 @@ export default function NavLinks() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-48">
           <DropdownMenuItem className="cursor-pointer">Memes</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Animes</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">Anime</DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">Movies</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">Music</DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             Sound Effects
           </DropdownMenuItem>

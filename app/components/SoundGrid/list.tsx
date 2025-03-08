@@ -129,7 +129,7 @@ export default function SoundCard({
       {/* Title & Category */}
       <div className="text-center">
         <h3 className="text-lg font-semibold capitalize">{title}</h3>
-        <p className="text-sm text-gray-500">{category}</p>
+        <p className="text-sm text-gray-500 capitalize">{category}</p>
       </div>
 
       {/* Play & Download Buttons */}

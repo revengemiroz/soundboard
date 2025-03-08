@@ -145,6 +145,9 @@ export default function SoundboardPage() {
               <TabsTrigger value="movies" className="cursor-pointer">
                 Movies
               </TabsTrigger>
+              <TabsTrigger value="music" className="cursor-pointer">
+                Music
+              </TabsTrigger>
               <TabsTrigger value="viral" className="cursor-pointer">
                 Viral
               </TabsTrigger>

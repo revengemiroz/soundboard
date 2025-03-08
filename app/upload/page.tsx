@@ -156,10 +156,13 @@ export default function UploadPage() {
               required
             >
               <option value="">Select a category</option>
-              <option value="meme">Meme</option>
-              <option value="effect">Sound Effect</option>
+              <option value="anime">Anime</option>
+              <option value="memes">Memes</option>
+              <option value="movies">Movies</option>
               <option value="music">Music</option>
-              <option value="voice">Voice</option>
+              <option value="viral">Viral</option>
+              <option value="discord">Discord</option>
+              <option value="tiktok">Tiktok</option>
             </select>
           </div>
 
