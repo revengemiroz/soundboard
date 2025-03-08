@@ -9,7 +9,7 @@ export default function SoundList() {
   const [searchInput, setSearchInput] = useState(""); // Stores user input
   const [searchTerm, setSearchTerm] = useState(""); // Stores final query when Enter is pressed
   const searchedSounds = useQuery(api.sound.searchSounds, { searchTerm });
-
+  console.log({ searchedSounds });
   // Check if data is still loading
   const isLoading = searchedSounds === undefined;
 

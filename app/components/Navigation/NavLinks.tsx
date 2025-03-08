@@ -38,6 +38,7 @@ export default function NavLinks() {
       {/* <NavLink to="/new" isNew>
         NEW
       </NavLink> */}
+      <NavLink to="/create-soundboard">CREATE SOUNDBOARD</NavLink>
       <NavLink to="/trends">TRENDS</NavLink>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -50,12 +51,21 @@ export default function NavLinks() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-48">
-          <DropdownMenuItem>Fashion</DropdownMenuItem>
-          <DropdownMenuItem>Technology</DropdownMenuItem>
-          <DropdownMenuItem>Home & Living</DropdownMenuItem>
-          <DropdownMenuItem>Sports & Outdoors</DropdownMenuItem>
-          <DropdownMenuItem>Beauty & Health</DropdownMenuItem>
-          <DropdownMenuItem>Books & Media</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">Memes</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">Animes</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">Movies</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            Sound Effects
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            Discord Soundboard
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            Viral Soundboard
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            TikTok Soundboard
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {/* <NavLink to="/create">CREATE</NavLink> */}

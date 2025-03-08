@@ -2,12 +2,26 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 // List all sounds
+// export const listSounds = query({
+//   args: {},
+//   handler: async (ctx) => {
+//     return await ctx.db.query("sounds").order("desc").collect();
+//   },
+// });
 export const listSounds = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("sounds").order("desc").collect();
+    const sounds = await ctx.db.query("sounds").order("desc").collect();
+
+    return await Promise.all(
+      sounds.map(async (sound) => ({
+        ...sound,
+        audioUrl: await ctx.storage.getUrl(sound.fileId),
+      }))
+    );
   },
 });
+
 // Get sounds by category
 export const getSoundsByCategory = query({
   args: { category: v.string() },
@@ -50,20 +64,48 @@ export const uploadSound = mutation({
 export const getSoundUrl = query({
   args: { fileId: v.id("_storage") },
   handler: async (ctx, { fileId }) => {
-    return await ctx.storage.getUrl(fileId);
+    const url = await ctx.storage.getUrl(fileId);
+    return url + "?raw=true"; // Ensures it plays instead of downloading
   },
 });
 
 // Search sounds by title (Case-Insensitive)
+// export const searchSounds = query({
+//   args: { searchTerm: v.string() },
+//   handler: async (ctx, { searchTerm }) => {
+//     const allSounds = await ctx.db.query("sounds").collect();
+//     // console.log({ allSounds }, ctx.storage.getUrl());
+
+//     if (!searchTerm) return allSounds;
+
+//     return allSounds.filter((sound) =>
+//       sound.title.toLowerCase().includes(searchTerm.toLowerCase())
+//     );
+//   },
+// });
 export const searchSounds = query({
   args: { searchTerm: v.string() },
   handler: async (ctx, { searchTerm }) => {
     const allSounds = await ctx.db.query("sounds").collect();
 
-    if (!searchTerm) return allSounds;
+    if (!searchTerm) {
+      return await Promise.all(
+        allSounds.map(async (sound) => ({
+          ...sound,
+          audioUrl: await ctx.storage.getUrl(sound.fileId),
+        }))
+      );
+    }
 
-    return allSounds.filter((sound) =>
+    const filteredSounds = allSounds.filter((sound) =>
       sound.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    return await Promise.all(
+      filteredSounds.map(async (sound) => ({
+        ...sound,
+        audioUrl: await ctx.storage.getUrl(sound.fileId),
+      }))
     );
   },
 });

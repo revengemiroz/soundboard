@@ -4,6 +4,7 @@ import "./globals.css";
 import FooterSection from "./components/Footer/footerSection";
 import Navbar from "./components/Navigation/Navbar";
 import { ConvexClientProvider } from "./ConvexClientProvider";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,21 @@ export default function RootLayout({
         <ConvexClientProvider>{children}</ConvexClientProvider>
         <FooterSection />
       </body>
+      <>
+        <Script
+          strategy="lazyOnload"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_TAG_ID}`}
+        />
+
+        <Script id="" strategy="lazyOnload">
+          {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_TAG_ID}');
+          `}
+        </Script>
+      </>
     </html>
   );
 }
