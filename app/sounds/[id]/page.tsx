@@ -3,11 +3,21 @@
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
-import { Play, Pause, Share, Download, ArrowLeft } from "lucide-react";
+import {
+  Play,
+  Pause,
+  Share,
+  Download,
+  ArrowLeft,
+  Mic,
+  Mic2,
+} from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { AudioVisualizer } from "../../components/AudioVisualizer";
 import { Id } from "@/convex/_generated/dataModel";
+
+import Card from "../Card";
 
 export default function SoundDetailsPage() {
   const { id } = useParams();
@@ -82,19 +92,21 @@ export default function SoundDetailsPage() {
 
       <div className="bg-white shadow-lg rounded-lg p-6 border">
         <h1 className="text-2xl font-bold capitalize">{sound.title}</h1>
-        <p className="text-gray-500 mb-6">
+        <p className="text-gray-500 flex items-center gap-2 mb-6 capitalize">
+          <Mic size={18} />
           {sound.category} • {new Date(sound.createdAt).toLocaleDateString()}
         </p>
 
         {/* Audio Player & Visualizer */}
         <div className="bg-gray-100 relative border rounded-md p-6 flex flex-col justify-center items-center">
-          <button
+          {/* <button
             onClick={togglePlay}
             className="bg-blue-500 cursor-pointer z-9 text-white p-3 rounded-full hover:bg-blue-600 my-12"
           >
             {isPlaying ? <Pause size={24} /> : <Play size={24} />}
-          </button>
+          </button> */}
 
+          <Card icon={Mic2} color={"bg-[#A855F7]"} title={sound.title} />
           {/* Real Audio Visualizer */}
           {/* <div className="absolute bottom-0 w-fit overflow-hidden">
             <AudioVisualizer
@@ -104,8 +116,20 @@ export default function SoundDetailsPage() {
           </div> */}
         </div>
 
+        <div className="grid grid-cols-2 gap-4  mx-auto mt-6">
+          <button className="flex items-center cursor-pointer justify-center gap-2 bg-gray-100 px-4 py-3 rounded-md text-gray-700 hover:bg-gray-200">
+            <Share className="h-5 w-5" />
+            Copy Link
+          </button>
+
+          <button className="flex items-center cursor-pointer justify-center gap-2 bg-gray-100 px-4 py-3 rounded-md text-gray-700 hover:bg-gray-200">
+            <Download className="h-5 w-5" />
+            Download MP3
+          </button>
+        </div>
+
         {/* Actions */}
-        <div className="flex items-center gap-4 mt-6">
+        {/* <div className="flex items-center gap-4 mt-6">
           <button
             onClick={() => navigator.clipboard.writeText("a")}
             className="flex cursor-pointer items-center text-gray-600 hover:text-indigo-600"
@@ -122,7 +146,7 @@ export default function SoundDetailsPage() {
               Download
             </button>
           )}
-        </div>
+        </div> */}
 
         {/* Audio Element (Hidden) */}
         {audioUrl && (
