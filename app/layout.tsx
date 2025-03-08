@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MyInstantsSoundBoard - The Sound Buttons Website",
+  title: "InstantSoundBoard - Largest collection of instant soundboard",
   keywords: [
     "soundboard, myinstants, sound board, my instant, meme soundboard",
   ],
@@ -39,7 +39,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-muted/90`}
       >
         <Navbar />
         <ConvexClientProvider>{children}</ConvexClientProvider>

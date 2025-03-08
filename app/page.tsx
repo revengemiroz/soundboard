@@ -9,14 +9,15 @@ export default function HomePage() {
     <>
       {/* <SEO /> */}
       <main className="max-w-7xl mx-auto px-4 py-6 sm:py-8 flex-grow">
-        <div className="text-center mb-8 sm:mb-12">
+        <div className="text-center mb-8 mt-12 sm:mt-24 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">
             InstantSoundboard - 400+ Sounds!
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
-            Discover funny sound buttons, memes, sound effects, soundboards.
-            Create your own sound buttons straight from the smartphone, desktop
-            or tablet
+            InstantSoundboard is your ultimate destination for the best sound
+            buttons, featuring meme soundboards, funny sound effects, gaming
+            sounds, and more. Browse and download from a massive collection of
+            free sound buttons.
           </p>
           {/* <SearchBar /> */}
         </div>

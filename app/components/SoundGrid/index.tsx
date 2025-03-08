@@ -4,6 +4,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import SoundCard from "./list";
 import { useState } from "react";
+import { Search } from "lucide-react";
 
 export default function SoundList() {
   const [searchInput, setSearchInput] = useState(""); // Stores user input
@@ -25,14 +26,15 @@ export default function SoundList() {
       <h2 className="text-2xl font-bold mb-6 text-center">Sound Library</h2>
 
       {/* Search Bar (Triggers Search on Enter) */}
-      <div className="mb-6 flex justify-center">
+      <div className="mb-6 max-w-md mx-auto flex justify-center relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
         <input
           type="text"
           placeholder="Search for sounds..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           onKeyDown={handleKeyPress} // Listen for Enter Key
-          className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full max-w-md pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
