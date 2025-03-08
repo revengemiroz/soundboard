@@ -161,6 +161,7 @@ export default function UploadPage() {
               <option value="movies">Movies</option>
               <option value="music">Music</option>
               <option value="viral">Viral</option>
+              <option value="sound-effects">Sound Effects</option>
               <option value="discord">Discord</option>
               <option value="tiktok">Tiktok</option>
             </select>
