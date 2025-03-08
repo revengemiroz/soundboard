@@ -9,6 +9,12 @@ import "react-circular-progressbar/dist/styles.css";
 import { Id } from "@/convex/_generated/dataModel";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface SoundCardProps {
   title: string;
@@ -127,50 +133,64 @@ export default function SoundCard({
       </div>
 
       {/* Title & Category */}
-      <div className="text-center">
-        <h3 className="text-lg font-semibold capitalize">{title}</h3>
-        <p className="text-sm text-gray-500 capitalize">{category}</p>
-      </div>
+      <TooltipProvider>
+        <div className="text-center">
+          <h3 className="text-lg font-semibold capitalize">{title}</h3>
+          <p className="text-sm text-gray-500 capitalize">{category}</p>
+        </div>
 
-      {/* Play & Download Buttons */}
-      <div className="flex items-center gap-4 mt-3">
-        <button
-          onClick={togglePlay}
-          className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full"
-        >
-          {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-        </button>
+        {/* Play & Download Buttons */}
+        <div className="flex items-center gap-4 mt-3">
+          {soundUrl && (
+            <Tooltip>
+              <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex">
+                <span onClick={togglePlay}>
+                  {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>{!isPlaying ? "Play" : "Pause"}</TooltipContent>
+            </Tooltip>
+          )}
 
+          {soundUrl && (
+            <Tooltip>
+              <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
+                <span onClick={handleDownload}>
+                  <Download size={20} />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Download</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+
+          {soundUrl && (
+            <Tooltip>
+              <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
+                <span onClick={addToSoundBoard}>
+                  <PlusCircle size={20} />
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Add To Soundboard</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+
+        {/* Hidden Audio Element */}
         {soundUrl && (
-          <span
-            onClick={handleDownload}
-            className="bg-gray-200 cursor-pointer p-3 rounded-full hover:bg-gray-300"
-          >
-            <Download size={20} />
-          </span>
+          <audio
+            ref={audioRef}
+            src={soundUrl}
+            onEnded={() => {
+              setIsPlaying(false);
+              setProgress(100);
+            }}
+          />
         )}
-
-        {soundUrl && (
-          <span
-            onClick={addToSoundBoard}
-            className="bg-gray-200 cursor-pointer p-3 rounded-full hover:bg-gray-300"
-          >
-            <PlusCircle size={20} />
-          </span>
-        )}
-      </div>
-
-      {/* Hidden Audio Element */}
-      {soundUrl && (
-        <audio
-          ref={audioRef}
-          src={soundUrl}
-          onEnded={() => {
-            setIsPlaying(false);
-            setProgress(100);
-          }}
-        />
-      )}
+      </TooltipProvider>
     </div>
   );
 }
