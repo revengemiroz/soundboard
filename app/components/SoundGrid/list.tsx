@@ -62,6 +62,7 @@ interface SoundCardProps {
   title: string;
   id: Id<"sounds">;
   category: string;
+  setSheetOpen: (boolean) => void;
   fileId: Id<"_storage">;
 }
 
@@ -70,6 +71,7 @@ export default function SoundCard({
   title,
   category,
   fileId,
+  setSheetOpen,
 }: SoundCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [Icon, setIcon] = useState<ReactNode>(null);
@@ -212,6 +214,7 @@ export default function SoundCard({
 
   const addToSoundBoard = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setSheetOpen(true);
   };
 
   return (
@@ -249,14 +252,14 @@ export default function SoundCard({
         {/* Play & Download Buttons */}
         <div className="flex items-center gap-4 mt-3">
           {soundUrl && (
-            <span onClick={togglePlay} onTouchStart={togglePlay}>
+            <button onClick={togglePlay} onTouchStart={togglePlay}>
               <Tooltip>
                 <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex">
                   {isPlaying ? <Pause size={20} /> : <Play size={20} />}
                 </TooltipTrigger>
                 <TooltipContent>{!isPlaying ? "Play" : "Pause"}</TooltipContent>
               </Tooltip>
-            </span>
+            </button>
           )}
 
           {soundUrl && (

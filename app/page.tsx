@@ -43,9 +43,8 @@ export default function HomePage() {
               See All →
             </button> */}
           </div>
-          <SoundList />
+          <SoundList sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} />
         </div>
-        <Button onClick={() => setSheetOpen(!sheetOpen)}>Open</Button>
 
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetContent>
