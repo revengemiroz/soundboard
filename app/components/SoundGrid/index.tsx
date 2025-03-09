@@ -57,7 +57,7 @@ export default function SoundList() {
               />
             ))
           ) : (
-            <p className="col-span-full text-center text-gray-500">
+            <p className="col-span-full text-center py-48 text-gray-500">
               No sounds found for "{searchTerm}"
             </p>
           )}

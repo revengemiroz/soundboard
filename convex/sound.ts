@@ -1,3 +1,4 @@
+import { paginationOptsValidator } from "convex/server";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -23,16 +24,16 @@ export const listSounds = query({
 });
 
 // Get sounds by category
-export const getSoundsByCategory = query({
-  args: { category: v.string() },
-  handler: async (ctx, { category }) => {
-    return await ctx.db
-      .query("sounds")
-      .withIndex("by_category", (q) => q.eq("category", category))
-      .order("desc")
-      .collect();
-  },
-});
+// export const getSoundsByCategory = query({
+//   args: { category: v.string() },
+//   handler: async (ctx, { category }) => {
+//     return await ctx.db
+//       .query("sounds")
+//       .withIndex("by_category", (q) => q.eq("category", category))
+//       .order("desc")
+//       .collect();
+//   },
+// });
 
 // Generate an upload URL for Convex Storage
 export const generateUploadUrl = mutation({
@@ -121,5 +122,44 @@ export const getSoundById = query({
     const fileUrl = await ctx.storage.getUrl(sound.fileId);
 
     return { ...sound, fileUrl };
+  },
+});
+
+export const getSoundsByCategory = query({
+  args: {
+    category: v.string(),
+    searchTerm: v.optional(v.string()), // ✅ Optional search term
+    paginationOpts: paginationOptsValidator, // ✅ Pagination
+  },
+  handler: async (ctx, { category, searchTerm, paginationOpts }) => {
+    console.log({ category, searchTerm, paginationOpts });
+
+    let queryBuilder = ctx.db
+      .query("sounds")
+      .withIndex("by_category", (q) => q.eq("category", category))
+      .order("desc");
+    const result = await queryBuilder.paginate(paginationOpts);
+    // ✅ If searchTerm exists, filter inside the query before pagination
+    // ✅ Step 2: Apply search filtering AFTER pagination
+    let filteredSounds = result.page;
+    if (searchTerm) {
+      filteredSounds = filteredSounds.filter((sound) =>
+        sound.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    // ✅ Step 3: Fetch audio URLs
+    const soundsWithUrls = await Promise.all(
+      filteredSounds.map(async (sound) => ({
+        ...sound,
+        audioUrl: await ctx.storage.getUrl(sound.fileId),
+      }))
+    );
+
+    console.log("Returning sounds:", soundsWithUrls.length);
+
+    return {
+      ...result,
+      page: soundsWithUrls, // ✅ Return final filtered + paginated data
+    };
   },
 });

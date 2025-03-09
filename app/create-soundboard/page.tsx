@@ -26,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Id } from "@/convex/_generated/dataModel";
+import SoundboardCard from "../components/soundboard/card";
 
 export default function SoundboardPage() {
   const [soundboard, setSoundboard] = useState([]);
@@ -231,51 +232,54 @@ export default function SoundboardPage() {
       <div className="grid min-h-40 p-4 bg-muted-foreground/10 w-full border-dotted border-3 rounded-md grid-cols-1 md:grid-cols-4 gap-4 mt-4">
         {/* <div className="min-h-12 bg-foreground/10 w-full">a</div> */}
         {[1, 2, 3].map((sound) => (
-          <SoundboardCard
-            key={sound._id}
-            sound={sound}
-            onAssignKey={assignKey}
-          />
+          <div>a</div>
+          // <SoundboardCard
+          //   key={sound._id ?? sound }
+          //   // id={sound?._id ?? ""}
+          //   title={sound?.title ?? ""}
+          //   category={sound?.category ?? ""}
+          //   fileId={sound?.fileId ?? ""}
+          // />
         ))}
       </div>
     </div>
   );
 }
 
-const SoundboardCard = ({ sound, onAssignKey }) => {
-  const [key, setKey] = useState(sound.key || "");
-  const handleKeyChange = (e) => {
-    const newKey = e.target.value.toLowerCase();
-    if (newKey.length === 1) {
-      setKey(newKey);
-      onAssignKey(sound.id, newKey);
-    }
-  };
-  return (
-    <div
-      key={sound.id}
-      className="relative group border-2 border-gray-200 bg-white rounded-md p-4 hover:border-gray-300 transition-colors"
-    >
-      <button
-        // onClick={() => playSound(sound.id)}
-        className={`w-full h-full flex flex-col items-center justify-center gap-3 ${
-          true ? "text-blue-500" : ""
-        }`}
-      >
-        <Volume2 className="h-6 w-6" />
-        <span className="text-sm">{sound.name ?? "title"}</span>
-        {sound.shortcut && (
-          <span className="text-xs px-2 py-1 bg-gray-100 rounded text-muted-foreground uppercase">
-            {sound.shortcut}
-          </span>
-        )}
-      </button>
-      <button
-        // onClick={() => removeSound(sound.id)}
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-full hover:bg-gray-100"
-      >
-        <Trash2 className="h-3 w-3 text-gray-400" />
-      </button>
-    </div>
-  );
-};
+// const SoundboardCard = ({ sound, onAssignKey }) => {
+//   const [key, setKey] = useState(sound.key || "");
+//   const handleKeyChange = (e) => {
+//     const newKey = e.target.value.toLowerCase();
+//     if (newKey.length === 1) {
+//       setKey(newKey);
+//       onAssignKey(sound.id, newKey);
+//     }
+//   };
+//   return (
+//     <div
+//       key={sound.id}
+//       className="relative group border-2 border-gray-200 bg-white rounded-md p-4 hover:border-gray-300 transition-colors"
+//     >
+//       <button
+//         // onClick={() => playSound(sound.id)}
+//         className={`w-full h-full flex flex-col items-center justify-center gap-3 ${
+//           true ? "text-blue-500" : ""
+//         }`}
+//       >
+//         <Volume2 className="h-6 w-6" />
+//         <span className="text-sm">{sound.name ?? "title"}</span>
+//         {sound.shortcut && (
+//           <span className="text-xs px-2 py-1 bg-gray-100 rounded text-muted-foreground uppercase">
+//             {sound.shortcut}
+//           </span>
+//         )}
+//       </button>
+//       <button
+//         // onClick={() => removeSound(sound.id)}
+//         className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-full hover:bg-gray-100"
+//       >
+//         <Trash2 className="h-3 w-3 text-gray-400" />
+//       </button>
+//     </div>
+//   );
+// };

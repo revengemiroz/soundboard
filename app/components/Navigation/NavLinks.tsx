@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface NavLinkProps {
   to: string;
@@ -32,6 +33,7 @@ function NavLink({ to, children, isNew }: NavLinkProps) {
 }
 
 export default function NavLinks() {
+  const router = useRouter();
   return (
     <div className="hidden md:flex items-center space-x-1">
       {/* <NavLink to="/">HOME</NavLink> */}
@@ -51,20 +53,52 @@ export default function NavLinks() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-48">
-          <DropdownMenuItem className="cursor-pointer">Memes</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Anime</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Movies</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Music</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => router.push("/category/memes")}
+            className="cursor-pointer"
+          >
+            Memes
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push("/category/anime")}
+            className="cursor-pointer"
+          >
+            Anime
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push("/category/movies")}
+            className="cursor-pointer"
+          >
+            Movies
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push("/category/music")}
+            className="cursor-pointer"
+          >
+            Music
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push("/category/sound-effects")}
+            className="cursor-pointer"
+          >
             Sound Effects
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => router.push("/category/discord")}
+            className="cursor-pointer"
+          >
             Discord Soundboard
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => router.push("/category/viral")}
+            className="cursor-pointer"
+          >
             Viral Soundboard
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={() => router.push("/category/tiktok")}
+            className="cursor-pointer"
+          >
             TikTok Soundboard
           </DropdownMenuItem>
         </DropdownMenuContent>

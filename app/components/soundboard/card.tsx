@@ -65,12 +65,7 @@ interface SoundCardProps {
   fileId: Id<"_storage">;
 }
 
-export default function SoundCard({
-  id,
-  title,
-  category,
-  fileId,
-}: SoundCardProps) {
+function SoundCard({ id, title, category, fileId }: SoundCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [Icon, setIcon] = useState<ReactNode>(null);
   const [color, setColor] = useState("bg-gray-500");
@@ -101,7 +96,6 @@ export default function SoundCard({
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    // audioRef.current.stop
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
@@ -258,3 +252,5 @@ export default function SoundCard({
     </div>
   );
 }
+
+export default SoundCard;

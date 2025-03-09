@@ -8,5 +8,5 @@ export default defineSchema({
     tags: v.array(v.string()),
     fileId: v.id("_storage"), // Store Convex Storage ID
     createdAt: v.number(),
-  }).index("by_category", ["category"]),
+  }).index("by_category", ["category", "createdAt"]),
 });
