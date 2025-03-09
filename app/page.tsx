@@ -1,10 +1,23 @@
-import { ConvexReactClient } from "convex/react";
-import React from "react";
+"use client";
+import React, { useState } from "react";
 // import { SEO } from "./components/SEO";
 // import { SearchBar } from "./components/SearchBar";
 import SoundList from "./components/SoundGrid";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+import { Button } from "@/components/ui/button";
+import SheetComponent from "./components/SheetComponent";
 
 export default function HomePage() {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
   return (
     <>
       {/* <SEO /> */}
@@ -32,6 +45,22 @@ export default function HomePage() {
           </div>
           <SoundList />
         </div>
+        <Button onClick={() => setSheetOpen(!sheetOpen)}>Open</Button>
+
+        <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>My Soundboard</SheetTitle>
+              <SheetDescription>
+                This is a list of your custom soundboard list.
+              </SheetDescription>
+            </SheetHeader>
+
+            <div className=" mx-4">
+              <SheetComponent />
+            </div>
+          </SheetContent>
+        </Sheet>
       </main>
     </>
   );

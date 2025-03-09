@@ -27,6 +27,7 @@ import {
   Heart,
   Star,
   Zap,
+  CirclePlus,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -197,15 +198,30 @@ export default function SoundDetailsPage() {
                 className: "!bg-white !text-black",
               });
             }}
-            className="flex items-center cursor-pointer justify-center gap-2 bg-gray-100 px-4 py-3 rounded-md text-gray-700 hover:bg-gray-200"
+            className="flex items-center justify-center gap-2 px-5 py-3 rounded-md 
+            border-2 border-indigo-700 text-indigo-700 
+            bg-transparent transition-all duration-300 
+            hover:bg-indigo-700 hover:text-white hover:shadow-md 
+            active:scale-95 cursor-pointer"
           >
             <Share className="h-5 w-5" />
             Copy Link
           </button>
 
-          <button className="flex items-center cursor-pointer justify-center gap-2 bg-gray-100 px-4 py-3 rounded-md text-gray-700 hover:bg-gray-200">
+          <button
+            className="flex items-center justify-center gap-2 px-5 py-3 rounded-md 
+                    border-2 border-indigo-700 text-indigo-700 
+                    bg-transparent transition-all duration-300 
+                    hover:bg-indigo-700 hover:text-white hover:shadow-md 
+                    active:scale-95 cursor-pointer"
+          >
             <Download className="h-5 w-5" />
             Download MP3
+          </button>
+
+          <button className="flex items-center w-full col-span-2  cursor-pointer justify-center gap-2 bg-indigo-600 px-4 py-3 rounded-md text-white hover:bg-indigo-700 transition-all">
+            <CirclePlus className="h-5 w-5" />
+            Add to Soundboard
           </button>
         </div>
 

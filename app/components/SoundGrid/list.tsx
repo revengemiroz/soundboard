@@ -100,7 +100,7 @@ export default function SoundCard({
     }, 100);
   };
 
-  const togglePlay = (e: React.MouseEvent) => {
+  const togglePlay = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
 
     if (!soundUrl) return;
@@ -108,6 +108,7 @@ export default function SoundCard({
     // Ensure the audio instance is created only once
     if (!audioRef.current) {
       audioRef.current = new Audio(soundUrl);
+      audioRef.current.preload = "auto";
       audioRef.current.addEventListener("timeupdate", () => {
         if (audioRef.current) {
           setProgress(
@@ -245,7 +246,7 @@ export default function SoundCard({
         {/* Play & Download Buttons */}
         <div className="flex items-center gap-4 mt-3">
           {soundUrl && (
-            <span onClick={togglePlay}>
+            <span onClick={togglePlay} onTouchStart={togglePlay}>
               <Tooltip>
                 <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex">
                   {isPlaying ? <Pause size={20} /> : <Play size={20} />}
