@@ -252,13 +252,17 @@ export default function SoundCard({
         {/* Play & Download Buttons */}
         <div className="flex items-center gap-4 mt-3">
           {soundUrl && (
-            <button onClick={togglePlay} onTouchStart={togglePlay}>
-              <Tooltip>
-                <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex">
-                  {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                </TooltipTrigger>
-                <TooltipContent>{!isPlaying ? "Play" : "Pause"}</TooltipContent>
-              </Tooltip>
+            <button
+              className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"
+              onClick={togglePlay}
+              onTouchStart={togglePlay}
+            >
+              {/* <Tooltip> */}
+              {/* <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"> */}
+              {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+              {/* </TooltipTrigger> */}
+              {/* <TooltipContent>{!isPlaying ? "Play" : "Pause"}</TooltipContent> */}
+              {/* </Tooltip> */}
             </button>
           )}
 

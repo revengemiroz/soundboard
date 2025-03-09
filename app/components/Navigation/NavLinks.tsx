@@ -101,6 +101,12 @@ export default function NavLinks() {
           >
             TikTok Soundboard
           </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push("/category/nepali")}
+            className="cursor-pointer"
+          >
+            Nepali Soundboard
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {/* <NavLink to="/create">CREATE</NavLink> */}
