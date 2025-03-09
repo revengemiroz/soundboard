@@ -79,6 +79,8 @@ export default function SoundCard({
   const audioRef = useRef<HTMLAudioElement>(null);
   const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
 
+  let audioElement: HTMLAudioElement | null = null;
+
   useEffect(() => {
     const randomIconKey = getRandomElement(Object.keys(iconComponents));
     setIcon(iconComponents[randomIconKey]);
@@ -101,13 +103,39 @@ export default function SoundCard({
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    // audioRef.current.stop
-    if (!audioRef.current) return;
+    if (!soundUrl) return;
+
+    // Ensure the audio instance is created only once
+    if (!audioRef.current) {
+      audioRef.current = new Audio(soundUrl);
+      audioRef.current.addEventListener("timeupdate", () => {
+        if (audioRef.current) {
+          setProgress(
+            (audioRef.current.currentTime / audioRef.current.duration) * 100
+          );
+        }
+      });
+      audioRef.current.addEventListener("ended", () => {
+        setIsPlaying(false);
+        setProgress(100);
+      });
+      audioRef.current.addEventListener("error", () => {
+        console.error("Audio playback error detected, resetting...");
+        setIsPlaying(false);
+        setProgress(0);
+        audioRef.current?.pause();
+        audioRef.current!.currentTime = 0;
+      });
+    }
+
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play();
+      audioRef.current
+        .play()
+        .catch((error) => console.error("Play error:", error));
     }
+
     setIsPlaying(!isPlaying);
   };
 
@@ -135,6 +163,7 @@ export default function SoundCard({
 
   useEffect(() => {
     if (!audioRef.current) return;
+
     const audio = audioRef.current;
 
     const updateProgress = () => {
@@ -153,15 +182,25 @@ export default function SoundCard({
       setProgress(100); // Ensure progress reaches 100% when audio ends
     };
 
+    const handleError = () => {
+      console.error("Audio playback error detected, resetting...");
+      setIsPlaying(false);
+      setProgress(0);
+      audio.pause();
+      audio.currentTime = 0; // Reset audio position
+    };
+
     // Attach event listeners
     audio.addEventListener("timeupdate", updateProgress);
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("error", handleError);
 
     return () => {
       audio.removeEventListener("timeupdate", updateProgress);
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("error", handleError);
     };
   }, [soundUrl]);
 
@@ -244,16 +283,6 @@ export default function SoundCard({
         </div>
 
         {/* Hidden Audio Element */}
-        {soundUrl && (
-          <audio
-            ref={audioRef}
-            src={soundUrl}
-            onEnded={() => {
-              setIsPlaying(false);
-              setProgress(100);
-            }}
-          />
-        )}
       </TooltipProvider>
     </div>
   );
