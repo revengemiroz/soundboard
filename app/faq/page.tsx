@@ -87,7 +87,7 @@ export default function FAQPage() {
             </Card>
           </CardContent>
 
-          <CardFooter className="flex flex-col items-center py-6">
+          <CardFooter className="flex flex-col items-center ">
             <p className="text-gray-700 mb-4">Still have questions?</p>
             <Button
               asChild
