@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { Play, Pause, Download, PlusCircle } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
@@ -16,6 +16,48 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import {
+  Plus,
+  Music,
+  Mic2,
+  Headphones,
+  Radio,
+  Volume2,
+  Disc,
+  Heart,
+  Star,
+  Zap,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import "react-circular-progressbar/dist/styles.css";
+
+const iconComponents = {
+  Music,
+  Mic2,
+  Headphones,
+  Radio,
+  Volume2,
+  Disc,
+  Heart,
+  Star,
+  Zap,
+};
+const colors = [
+  "bg-indigo-600",
+  "bg-pink-500",
+  "bg-amber-500",
+  "bg-red-500",
+  "bg-emerald-500",
+  "bg-blue-500",
+  "bg-purple-500",
+  "bg-cyan-500",
+  "bg-orange-500",
+];
+
+function getRandomElement<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 interface SoundCardProps {
   title: string;
   id: Id<"sounds">;
@@ -30,10 +72,31 @@ export default function SoundCard({
   fileId,
 }: SoundCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [Icon, setIcon] = useState<ReactNode>(null);
+  const [color, setColor] = useState("bg-gray-500");
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
+
+  useEffect(() => {
+    const randomIconKey = getRandomElement(Object.keys(iconComponents));
+    setIcon(iconComponents[randomIconKey]);
+    setColor(getRandomElement(colors));
+  }, []);
+
+  const startProgress = () => {
+    setProgress(0);
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev + 1;
+      });
+    }, 100);
+  };
 
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -116,20 +179,20 @@ export default function SoundCard({
     >
       {/* <Link href={`/sounds/${id}`} className="block"> */}
       {/* Circular Progress Bar for Audio Playback */}
-      <div className="w-20 h-20 mb-3">
+      <div className="w-20 h-20 relative">
         <CircularProgressbar
           value={progress}
-          text={
-            isPlaying && duration > 0
-              ? `${Math.round((progress / 100) * duration)}s`
-              : "0s"
-          }
           styles={buildStyles({
-            textSize: "12px",
-            pathColor: isPlaying ? "#4F46E5" : "#CBD5E0",
+            textSize: "24px",
+            pathColor: "#4F46E5",
             trailColor: "#E5E7EB",
           })}
         />
+        {Icon && (
+          <Icon
+            className={`absolute inset-0 border rounded-full flex items-center justify-center w-[75%] h-auto text-white  m-auto p-[12px] ${color && color}`}
+          />
+        )}
       </div>
 
       {/* Title & Category */}
@@ -142,27 +205,27 @@ export default function SoundCard({
         {/* Play & Download Buttons */}
         <div className="flex items-center gap-4 mt-3">
           {soundUrl && (
-            <Tooltip>
-              <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex">
-                <span onClick={togglePlay}>
+            <span onClick={togglePlay}>
+              <Tooltip>
+                <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex">
                   {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>{!isPlaying ? "Play" : "Pause"}</TooltipContent>
-            </Tooltip>
+                </TooltipTrigger>
+                <TooltipContent>{!isPlaying ? "Play" : "Pause"}</TooltipContent>
+              </Tooltip>
+            </span>
           )}
 
           {soundUrl && (
-            <Tooltip>
-              <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
-                <span onClick={handleDownload}>
+            <span onClick={handleDownload}>
+              <Tooltip>
+                <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
                   <Download size={20} />
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Download</p>
-              </TooltipContent>
-            </Tooltip>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Download</p>
+                </TooltipContent>
+              </Tooltip>
+            </span>
           )}
 
           {soundUrl && (
