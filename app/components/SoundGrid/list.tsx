@@ -100,7 +100,7 @@ export default function SoundCard({
     }, 100);
   };
 
-  const togglePlay = (e: React.MouseEvent | React.TouchEvent) => {
+  const togglePlay = async (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
 
     if (!soundUrl) return;
@@ -109,6 +109,8 @@ export default function SoundCard({
     if (!audioRef.current) {
       audioRef.current = new Audio(soundUrl);
       audioRef.current.preload = "auto";
+      audioRef.current.crossOrigin = "anonymous";
+      audioRef.current.muted = false;
       audioRef.current.addEventListener("timeupdate", () => {
         if (audioRef.current) {
           setProgress(
@@ -129,15 +131,16 @@ export default function SoundCard({
       });
     }
 
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current
-        .play()
-        .catch((error) => console.error("Play error:", error));
+    try {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        await audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    } catch (error) {
+      console.error("iOS Safari Play error:", error);
     }
-
-    setIsPlaying(!isPlaying);
   };
 
   const handleDownload = async (e: React.MouseEvent) => {
