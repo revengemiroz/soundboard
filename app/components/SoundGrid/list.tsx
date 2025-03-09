@@ -28,7 +28,7 @@ import {
   Star,
   Zap,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+
 import "react-circular-progressbar/dist/styles.css";
 
 const iconComponents = {
@@ -175,7 +175,7 @@ export default function SoundCard({
       onClick={() => {
         router.push(`/sounds/${id}`);
       }}
-      className="bg-white rounded-xl cursor-pointer shadow-lg p-4 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all"
+      className="bg-white rounded-xl cursor-pointer shadow-lg p-4 py-8 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all"
     >
       {/* <Link href={`/sounds/${id}`} className="block"> */}
       {/* Circular Progress Bar for Audio Playback */}

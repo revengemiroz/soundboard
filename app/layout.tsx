@@ -5,6 +5,7 @@ import FooterSection from "./components/Footer/footerSection";
 import Navbar from "./components/Navigation/Navbar";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import Script from "next/script";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
         <Navbar />
         <ConvexClientProvider>{children}</ConvexClientProvider>
         <FooterSection />
+        <Toaster />
       </body>
       <>
         <Script
