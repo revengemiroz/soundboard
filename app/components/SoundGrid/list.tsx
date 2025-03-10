@@ -7,8 +7,8 @@ import { useQuery } from "convex/react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Id } from "@/convex/_generated/dataModel";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Howl } from "howler";
 import {
   Tooltip,
   TooltipContent,
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/tooltip";
 
 import {
-  Plus,
   Music,
   Mic2,
   Headphones,
@@ -77,11 +76,9 @@ export default function SoundCard({
   const [Icon, setIcon] = useState<ReactNode>(null);
   const [color, setColor] = useState("bg-gray-500");
   const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const soundRef = useRef<Howl | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
   const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
-
-  let audioElement: HTMLAudioElement | null = null;
 
   useEffect(() => {
     const randomIconKey = getRandomElement(Object.keys(iconComponents));
@@ -89,59 +86,73 @@ export default function SoundCard({
     setColor(getRandomElement(colors));
   }, []);
 
-  const startProgress = () => {
-    setProgress(0);
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev + 1;
-      });
-    }, 100);
-  };
-
-  const togglePlay = async (e: React.MouseEvent | React.TouchEvent) => {
-    e.stopPropagation();
-
+  useEffect(() => {
     if (!soundUrl) return;
 
-    // Ensure the audio instance is created only once
-    if (!audioRef.current) {
-      audioRef.current = new Audio(soundUrl);
-      audioRef.current.preload = "auto";
-      audioRef.current.crossOrigin = "anonymous";
-      audioRef.current.muted = false;
-      audioRef.current.addEventListener("timeupdate", () => {
-        if (audioRef.current) {
-          setProgress(
-            (audioRef.current.currentTime / audioRef.current.duration) * 100
-          );
-        }
-      });
-      audioRef.current.addEventListener("ended", () => {
+    // Initialize Howl instance
+    soundRef.current = new Howl({
+      src: [soundUrl],
+      html5: true, // Force HTML5 to avoid issues with CORS
+      onplay: () => {
+        setIsPlaying(true);
+        startProgressTracking();
+      },
+      onpause: () => {
+        setIsPlaying(false);
+        stopProgressTracking();
+      },
+      onend: () => {
         setIsPlaying(false);
         setProgress(100);
-      });
-      audioRef.current.addEventListener("error", () => {
-        console.error("Audio playback error detected, resetting...");
-        setIsPlaying(false);
-        setProgress(0);
-        audioRef.current?.pause();
-        audioRef.current!.currentTime = 0;
-      });
-    }
+        // setProgress(0);
+        stopProgressTracking();
+      },
+      onload: () => {
+        // Set initial duration if needed
+      },
+    });
 
-    try {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        await audioRef.current.play();
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unload(); // Clean up Howl instance
       }
-      setIsPlaying(!isPlaying);
-    } catch (error) {
-      console.error("iOS Safari Play error:", error);
+      stopProgressTracking();
+    };
+  }, [soundUrl]);
+
+  const startProgressTracking = () => {
+    const updateProgress = () => {
+      if (soundRef.current && soundRef.current.playing()) {
+        const currentTime = soundRef.current.seek() || 0;
+        const totalDuration = soundRef.current.duration() || 1;
+        const newProgress = (currentTime / totalDuration) * 100;
+        setProgress(newProgress);
+
+        // Continue the loop
+        animationFrameRef.current = requestAnimationFrame(updateProgress);
+      }
+    };
+
+    // Start the loop
+    animationFrameRef.current = requestAnimationFrame(updateProgress);
+  };
+
+  const stopProgressTracking = () => {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+  };
+
+  const togglePlay = (e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
+
+    if (!soundRef.current) return;
+
+    if (isPlaying) {
+      soundRef.current.pause();
+    } else {
+      soundRef.current.play();
     }
   };
 
@@ -167,55 +178,12 @@ export default function SoundCard({
     }
   };
 
-  useEffect(() => {
-    if (!audioRef.current) return;
-
-    const audio = audioRef.current;
-
-    const updateProgress = () => {
-      if (audio.duration > 0) {
-        setProgress((audio.currentTime / audio.duration) * 100);
-      }
-    };
-
-    const handleLoadedMetadata = () => {
-      setDuration(audio.duration);
-      setProgress(0);
-    };
-
-    const handleEnded = () => {
-      setIsPlaying(false);
-      setProgress(100); // Ensure progress reaches 100% when audio ends
-    };
-
-    const handleError = () => {
-      console.error("Audio playback error detected, resetting...");
-      setIsPlaying(false);
-      setProgress(0);
-      audio.pause();
-      audio.currentTime = 0; // Reset audio position
-    };
-
-    // Attach event listeners
-    audio.addEventListener("timeupdate", updateProgress);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-    audio.addEventListener("ended", handleEnded);
-    audio.addEventListener("error", handleError);
-
-    return () => {
-      audio.removeEventListener("timeupdate", updateProgress);
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.removeEventListener("ended", handleEnded);
-      audio.removeEventListener("error", handleError);
-    };
-  }, [soundUrl]);
-
-  const router = useRouter();
-
   const addToSoundBoard = (e: React.MouseEvent) => {
     e.stopPropagation();
     setSheetOpen(true);
   };
+
+  const router = useRouter();
 
   return (
     <div
@@ -224,7 +192,6 @@ export default function SoundCard({
       }}
       className="bg-white rounded-xl cursor-pointer shadow-lg p-4 py-8 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all"
     >
-      {/* <Link href={`/sounds/${id}`} className="block"> */}
       {/* Circular Progress Bar for Audio Playback */}
       <div className="w-20 h-20 relative">
         <CircularProgressbar
@@ -255,14 +222,8 @@ export default function SoundCard({
             <button
               className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"
               onClick={togglePlay}
-              // onTouchStart={togglePlay}
             >
-              {/* <Tooltip> */}
-              {/* <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"> */}
               {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-              {/* </TooltipTrigger> */}
-              {/* <TooltipContent>{!isPlaying ? "Play" : "Pause"}</TooltipContent> */}
-              {/* </Tooltip> */}
             </button>
           )}
 
@@ -292,8 +253,6 @@ export default function SoundCard({
             </span>
           )}
         </div>
-
-        {/* Hidden Audio Element */}
       </TooltipProvider>
     </div>
   );
