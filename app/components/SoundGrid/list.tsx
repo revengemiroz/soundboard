@@ -8,7 +8,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Id } from "@/convex/_generated/dataModel";
 import { useRouter } from "next/navigation";
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
 import {
   Tooltip,
   TooltipContent,
@@ -76,117 +76,200 @@ export default function SoundCard({
   const [Icon, setIcon] = useState<ReactNode>(null);
   const [color, setColor] = useState("bg-gray-500");
   const [progress, setProgress] = useState(0);
-  const [soundLoaded, setSoundLoaded] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
   const soundRef = useRef<Howl | null>(null);
+  const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
-  const [iOSInteracted, setIOSInteracted] = useState(false);
+  const router = useRouter();
 
-  // Detect iOS
-  const isIOS = useRef(
-    typeof window !== "undefined" &&
-      (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1))
-  );
+  // Check if device is iOS
+  const isIOS =
+    typeof navigator !== "undefined" &&
+    (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
 
+  // On component mount
   useEffect(() => {
     const randomIconKey = getRandomElement(Object.keys(iconComponents));
     setIcon(iconComponents[randomIconKey]);
     setColor(getRandomElement(colors));
+
+    // For iOS, unlock the audio context on first user interaction
+    if (isIOS) {
+      const unlockAudio = () => {
+        // Create a temporary audio context for iOS unlock
+        const audioContext = new (window.AudioContext ||
+          (window as any).webkitAudioContext)();
+        audioContext.resume().then(() => {
+          console.log("AudioContext unlocked on iOS");
+        });
+
+        // Play a silent audio to unlock
+        const audio = new Audio();
+        audio
+          .play()
+          .then(() => {
+            console.log("Silent audio played successfully");
+          })
+          .catch((e) => {
+            console.warn("Failed to play silent audio:", e);
+          });
+
+        document.removeEventListener("touchstart", unlockAudio);
+      };
+
+      document.addEventListener("touchstart", unlockAudio, false);
+
+      return () => {
+        document.removeEventListener("touchstart", unlockAudio);
+      };
+    }
   }, []);
 
+  // When sound URL is available
   useEffect(() => {
     if (!soundUrl) return;
 
-    // Clean up previous instance
-    if (soundRef.current) {
-      soundRef.current.unload();
+    // For iOS, try using native HTML5 Audio element as fallback
+    if (isIOS) {
+      try {
+        // If we already have an audio element, clean it up
+        if (audioElementRef.current) {
+          audioElementRef.current.pause();
+          audioElementRef.current.src = "";
+        }
+
+        // Create new audio element
+        const audioElement = new Audio(soundUrl);
+        audioElement.preload = "auto";
+
+        audioElement.oncanplaythrough = () => {
+          console.log("Audio can play through");
+          setAudioReady(true);
+        };
+
+        audioElement.onended = () => {
+          console.log("Audio ended");
+          setIsPlaying(false);
+          setProgress(0);
+          audioElement.currentTime = 0;
+          stopProgressTracking();
+        };
+
+        audioElement.onerror = (e) => {
+          console.error("Audio error:", e);
+          setAudioError("Failed to load audio");
+        };
+
+        // Store reference
+        audioElementRef.current = audioElement;
+
+        // Try to load the audio
+        audioElement.load();
+
+        console.log("Using native HTML5 Audio for iOS");
+      } catch (error) {
+        console.error("Error setting up HTML5 Audio:", error);
+        setAudioError("Failed to initialize audio");
+      }
+    }
+    // For non-iOS devices, use Howler
+    else {
+      try {
+        // Clean up previous instance
+        if (soundRef.current) {
+          soundRef.current.unload();
+        }
+
+        // Force HTML5 Audio mode for all devices
+        Howler.html5PoolSize = 10;
+
+        // Initialize new Howl
+        soundRef.current = new Howl({
+          src: [soundUrl],
+          html5: true,
+          preload: true,
+          format: ["mp3"],
+          onplay: () => {
+            console.log("Howl onplay fired");
+            setIsPlaying(true);
+            startProgressTracking();
+          },
+          onpause: () => {
+            console.log("Howl onpause fired");
+            setIsPlaying(false);
+            stopProgressTracking();
+          },
+          onend: () => {
+            console.log("Howl onend fired");
+            setIsPlaying(false);
+            setProgress(0);
+            if (soundRef.current) {
+              soundRef.current.seek(0);
+            }
+            stopProgressTracking();
+          },
+          onload: () => {
+            console.log("Howl onload fired");
+            setAudioReady(true);
+            setAudioError(null);
+          },
+          onloaderror: (id, error) => {
+            console.error("Howl load error:", error);
+            setAudioError("Failed to load audio");
+          },
+          onplayerror: (id, error) => {
+            console.error("Howl play error:", error);
+            setAudioError("Failed to play audio");
+          },
+        });
+
+        console.log("Using Howler for non-iOS device");
+      } catch (error) {
+        console.error("Error setting up Howler:", error);
+        setAudioError("Failed to initialize audio");
+      }
     }
 
-    // Initialize Howl instance with iOS-friendly settings
-    soundRef.current = new Howl({
-      src: [soundUrl],
-      html5: true, // Enable HTML5 Audio to better handle iOS
-      preload: true, // Preload the audio
-      format: ["mp3"], // Explicitly specify format
-      onplay: () => {
-        setIsPlaying(true);
-        startProgressTracking();
-      },
-      onpause: () => {
-        setIsPlaying(false);
-        stopProgressTracking();
-      },
-      onend: () => {
-        setIsPlaying(false);
-        setProgress(0);
-        stopProgressTracking();
-
-        // Reset the audio position to the beginning
-        if (soundRef.current) {
-          soundRef.current.seek(0);
-        }
-      },
-      onload: () => {
-        setSoundLoaded(true);
-        console.log("Sound loaded successfully");
-      },
-      onloaderror: (id, error) => {
-        console.error("Error loading sound:", error);
-      },
-    });
-
     return () => {
+      stopProgressTracking();
+
+      // Clean up resources
       if (soundRef.current) {
         soundRef.current.unload();
       }
-      stopProgressTracking();
-    };
-  }, [soundUrl]);
 
-  // iOS-specific unlock audio context on first interaction
-  useEffect(() => {
-    const unlockAudio = () => {
-      if (!iOSInteracted && isIOS.current) {
-        // Create and play a silent sound to unlock audio
-        const silentSound = new Howl({
-          src: [
-            "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAADQgD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAAA5TEFNRTMuMTAwAc0AAAAAAAAAABSAJAkYQQAAgAAAA0Ji8O6gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQRAAP8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQRDaP8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ==",
-          ],
-          format: ["mp3"],
-          html5: true,
-          volume: 0,
-        });
-        silentSound.play();
-        silentSound.unload();
-        setIOSInteracted(true);
-
-        // Remove listener after first interaction
-        document.removeEventListener("touchstart", unlockAudio);
+      if (audioElementRef.current) {
+        audioElementRef.current.pause();
+        audioElementRef.current.src = "";
       }
     };
+  }, [soundUrl, isIOS]);
 
-    if (isIOS.current) {
-      document.addEventListener("touchstart", unlockAudio);
-    }
-
-    return () => {
-      if (isIOS.current) {
-        document.removeEventListener("touchstart", unlockAudio);
-      }
-    };
-  }, [iOSInteracted]);
-
+  // Progress tracking function for both Howler and HTML5 Audio
   const startProgressTracking = () => {
     const updateProgress = () => {
-      if (soundRef.current && soundRef.current.playing()) {
-        const currentTime = soundRef.current.seek() || 0;
-        const totalDuration = soundRef.current.duration() || 1;
-        const newProgress = (currentTime / totalDuration) * 100;
-        setProgress(newProgress);
+      try {
+        if (isIOS && audioElementRef.current) {
+          // HTML5 Audio progress tracking
+          const currentTime = audioElementRef.current.currentTime || 0;
+          const totalDuration = audioElementRef.current.duration || 1;
+          const newProgress = (currentTime / totalDuration) * 100;
+          setProgress(newProgress);
+        } else if (soundRef.current && soundRef.current.playing()) {
+          // Howler progress tracking
+          const currentTime = soundRef.current.seek() || 0;
+          const totalDuration = soundRef.current.duration() || 1;
+          const newProgress = (currentTime / totalDuration) * 100;
+          setProgress(newProgress);
+        }
 
         // Continue the loop
         animationFrameRef.current = requestAnimationFrame(updateProgress);
+      } catch (error) {
+        console.error("Error in progress tracking:", error);
       }
     };
 
@@ -201,20 +284,77 @@ export default function SoundCard({
     }
   };
 
+  // Play/pause function that works for both Howler and HTML5 Audio
   const togglePlay = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
+    e.preventDefault();
 
-    if (!soundRef.current || !soundLoaded) return;
+    console.log("Toggle play clicked, isIOS:", isIOS);
 
     try {
-      if (isPlaying) {
-        soundRef.current.pause();
-      } else {
-        // iOS may need to be played with user gesture
-        soundRef.current.play();
+      if (isIOS && audioElementRef.current) {
+        // For iOS using HTML5 Audio
+        console.log("Using HTML5 Audio toggle, isPlaying:", isPlaying);
+
+        if (isPlaying) {
+          audioElementRef.current.pause();
+          setIsPlaying(false);
+          stopProgressTracking();
+        } else {
+          // On iOS, we need to call load() before play() for some cases
+          audioElementRef.current.load();
+
+          // Use play() with promise handling for better iOS support
+          const playPromise = audioElementRef.current.play();
+
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                console.log("Audio play succeeded");
+                setIsPlaying(true);
+                startProgressTracking();
+              })
+              .catch((error) => {
+                console.error("Audio play failed:", error);
+                // Try playing with user gesture in the error case
+                const userPlayAttempt = () => {
+                  audioElementRef.current
+                    ?.play()
+                    .then(() => {
+                      console.log("User gesture play succeeded");
+                      setIsPlaying(true);
+                      startProgressTracking();
+                    })
+                    .catch((err) => {
+                      console.error(
+                        "Even with user gesture, play failed:",
+                        err
+                      );
+                      setAudioError("Cannot play audio. Try again.");
+                    });
+
+                  document.removeEventListener("touchend", userPlayAttempt);
+                };
+
+                document.addEventListener("touchend", userPlayAttempt, {
+                  once: true,
+                });
+              });
+          }
+        }
+      } else if (soundRef.current) {
+        // For non-iOS using Howler
+        console.log("Using Howler toggle, isPlaying:", isPlaying);
+
+        if (isPlaying) {
+          soundRef.current.pause();
+        } else {
+          soundRef.current.play();
+        }
       }
     } catch (error) {
-      console.error("Error playing/pausing audio:", error);
+      console.error("Error in togglePlay:", error);
+      setAudioError("Play/pause operation failed");
     }
   };
 
@@ -229,7 +369,7 @@ export default function SoundCard({
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = title + ".mp3"; // Ensure correct file extension
+      a.download = title + ".mp3";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -244,8 +384,6 @@ export default function SoundCard({
     e.stopPropagation();
     setSheetOpen(true);
   };
-
-  const router = useRouter();
 
   return (
     <div
@@ -270,6 +408,11 @@ export default function SoundCard({
           />
         )}
       </div>
+
+      {/* Error message if any */}
+      {audioError && (
+        <div className="text-red-500 text-xs mt-2">{audioError}</div>
+      )}
 
       {/* Title & Category */}
       <TooltipProvider>
@@ -316,6 +459,16 @@ export default function SoundCard({
           )}
         </div>
       </TooltipProvider>
+
+      {/* Hidden loader for iOS */}
+      {isIOS && (
+        <audio
+          style={{ display: "none" }}
+          preload="auto"
+          playsInline
+          src={soundUrl || ""}
+        />
+      )}
     </div>
   );
 }
