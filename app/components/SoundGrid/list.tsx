@@ -76,9 +76,18 @@ export default function SoundCard({
   const [Icon, setIcon] = useState<ReactNode>(null);
   const [color, setColor] = useState("bg-gray-500");
   const [progress, setProgress] = useState(0);
+  const [soundLoaded, setSoundLoaded] = useState(false);
   const soundRef = useRef<Howl | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
+  const [iOSInteracted, setIOSInteracted] = useState(false);
+
+  // Detect iOS
+  const isIOS = useRef(
+    typeof window !== "undefined" &&
+      (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1))
+  );
 
   useEffect(() => {
     const randomIconKey = getRandomElement(Object.keys(iconComponents));
@@ -89,11 +98,17 @@ export default function SoundCard({
   useEffect(() => {
     if (!soundUrl) return;
 
-    // Initialize Howl instance
+    // Clean up previous instance
+    if (soundRef.current) {
+      soundRef.current.unload();
+    }
+
+    // Initialize Howl instance with iOS-friendly settings
     soundRef.current = new Howl({
       src: [soundUrl],
-      mute: false,
-      html5: true, // Force HTML5 to avoid issues with CORS
+      html5: true, // Enable HTML5 Audio to better handle iOS
+      preload: true, // Preload the audio
+      format: ["mp3"], // Explicitly specify format
       onplay: () => {
         setIsPlaying(true);
         startProgressTracking();
@@ -104,22 +119,63 @@ export default function SoundCard({
       },
       onend: () => {
         setIsPlaying(false);
-        setProgress(100);
-        // setProgress(0);
+        setProgress(0);
         stopProgressTracking();
+
+        // Reset the audio position to the beginning
+        if (soundRef.current) {
+          soundRef.current.seek(0);
+        }
       },
       onload: () => {
-        // Set initial duration if needed
+        setSoundLoaded(true);
+        console.log("Sound loaded successfully");
+      },
+      onloaderror: (id, error) => {
+        console.error("Error loading sound:", error);
       },
     });
 
     return () => {
       if (soundRef.current) {
-        soundRef.current.unload(); // Clean up Howl instance
+        soundRef.current.unload();
       }
       stopProgressTracking();
     };
   }, [soundUrl]);
+
+  // iOS-specific unlock audio context on first interaction
+  useEffect(() => {
+    const unlockAudio = () => {
+      if (!iOSInteracted && isIOS.current) {
+        // Create and play a silent sound to unlock audio
+        const silentSound = new Howl({
+          src: [
+            "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAABAAADQgD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8AAAA5TEFNRTMuMTAwAc0AAAAAAAAAABSAJAkYQQAAgAAAA0Ji8O6gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//sQRAAP8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAETEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQRDaP8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ==",
+          ],
+          format: ["mp3"],
+          html5: true,
+          volume: 0,
+        });
+        silentSound.play();
+        silentSound.unload();
+        setIOSInteracted(true);
+
+        // Remove listener after first interaction
+        document.removeEventListener("touchstart", unlockAudio);
+      }
+    };
+
+    if (isIOS.current) {
+      document.addEventListener("touchstart", unlockAudio);
+    }
+
+    return () => {
+      if (isIOS.current) {
+        document.removeEventListener("touchstart", unlockAudio);
+      }
+    };
+  }, [iOSInteracted]);
 
   const startProgressTracking = () => {
     const updateProgress = () => {
@@ -148,12 +204,17 @@ export default function SoundCard({
   const togglePlay = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
 
-    if (!soundRef.current) return;
+    if (!soundRef.current || !soundLoaded) return;
 
-    if (isPlaying) {
-      soundRef.current.pause();
-    } else {
-      soundRef.current.play();
+    try {
+      if (isPlaying) {
+        soundRef.current.pause();
+      } else {
+        // iOS may need to be played with user gesture
+        soundRef.current.play();
+      }
+    } catch (error) {
+      console.error("Error playing/pausing audio:", error);
     }
   };
 
@@ -205,7 +266,7 @@ export default function SoundCard({
         />
         {Icon && (
           <Icon
-            className={`absolute inset-0 border rounded-full flex items-center justify-center w-[75%] h-auto text-white  m-auto p-[12px] ${color && color}`}
+            className={`absolute inset-0 border rounded-full flex items-center justify-center w-[75%] h-auto text-white m-auto p-[12px] ${color && color}`}
           />
         )}
       </div>
