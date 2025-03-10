@@ -255,7 +255,7 @@ export default function SoundCard({
             <button
               className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"
               onClick={togglePlay}
-              onTouchStart={togglePlay}
+              // onTouchStart={togglePlay}
             >
               {/* <Tooltip> */}
               {/* <TooltipTrigger className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"> */}
@@ -280,16 +280,16 @@ export default function SoundCard({
           )}
 
           {soundUrl && (
-            <Tooltip>
-              <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
-                <span onClick={addToSoundBoard}>
+            <span onClick={addToSoundBoard}>
+              <Tooltip>
+                <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
                   <PlusCircle size={20} />
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Add To Soundboard</p>
-              </TooltipContent>
-            </Tooltip>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add To Soundboard</p>
+                </TooltipContent>
+              </Tooltip>
+            </span>
           )}
         </div>
 

@@ -44,7 +44,7 @@ function getRandomElement<T>(array: T[]): T {
 
 function Index() {
   return (
-    <div className="grid grid-cols-3 gap-2 bg-muted-foreground/20 p-2">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-muted-foreground/20 p-2">
       {[1, 2, 3, 4, 5].map((a) => {
         // Generate unique random values for each Card
         const RandomIcon = getRandomElement(Object.values(iconComponents));
@@ -71,19 +71,24 @@ const Card = ({ title, category, Icon, color }) => {
         <div className="absolute cursor-pointer hover:scale-105 active:scale-90 transition-all top-[-12px] bg-gray-300 rounded-full p-1 right-[-15px]">
           <X className="w-3 h-3" />
         </div>
-        <CircularProgressbar
-          value={50}
-          styles={buildStyles({
-            textSize: "24px",
-            pathColor: "#4F46E5",
-            trailColor: "#E5E7EB",
-          })}
-        />
-        {Icon && (
-          <Icon
-            className={`absolute inset-0 border rounded-full flex items-center justify-center w-[75%] h-auto text-white m-auto p-[12px] ${color}`}
+        <div className="">
+          <CircularProgressbar
+            value={50}
+            styles={buildStyles({
+              textSize: "24px",
+              pathColor: "#4F46E5",
+              trailColor: "#E5E7EB",
+            })}
           />
-        )}
+
+          {Icon && (
+            <button onClick={() => {}}>
+              <Icon
+                className={`absolute transition-all hover:scale-105 cursor-pointer active:scale-90 inset-0 border rounded-full flex items-center justify-center w-[75%] h-auto text-white m-auto p-[12px] ${color}`}
+              />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="text-center">
