@@ -128,6 +128,8 @@ export default function SoundCard({
     }
   }, []);
 
+  const testUrl =
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
   // When sound URL is available
   useEffect(() => {
     if (!soundUrl) return;
@@ -142,7 +144,7 @@ export default function SoundCard({
         }
 
         // Create new audio element
-        const audioElement = new Audio(soundUrl);
+        const audioElement = new Audio(testUrl);
         audioElement.preload = "auto";
 
         audioElement.oncanplaythrough = () => {
@@ -188,7 +190,7 @@ export default function SoundCard({
 
         // Initialize new Howl
         soundRef.current = new Howl({
-          src: [soundUrl],
+          src: [testUrl],
           html5: true,
           preload: true,
           format: ["mp3"],
