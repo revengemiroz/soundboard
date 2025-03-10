@@ -51,7 +51,6 @@ function Index({ soundboardSounds, setSoundboardSounds }) {
         // Generate unique random values for each Card
         const RandomIcon = getRandomElement(Object.values(iconComponents));
         const randomColor = getRandomElement(colors);
-        console.log("sheet", sound);
         const removeSounds = () => {
           const filteredSounds = soundboardSounds.filter(
             (s) => s._id !== sound._id
@@ -162,6 +161,7 @@ const Card = ({ title, category, Icon, color, soundUrl, removeSounds }) => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("error", handleError);
+      audioRef.current?.pause();
     };
   }, [soundUrl]);
   // const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });

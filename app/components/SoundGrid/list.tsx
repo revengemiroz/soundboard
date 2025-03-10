@@ -228,7 +228,6 @@ export default function SoundCard({
   const addToSoundBoard = (e: React.MouseEvent) => {
     e.stopPropagation();
     setSheetOpen(true);
-    console.log({ soundboardSounds }, id);
     if (isAddedToSoundboard) {
       const filteredSounds = soundboardSounds.filter((s) => s._id !== id);
       setSoundboardSounds(filteredSounds);

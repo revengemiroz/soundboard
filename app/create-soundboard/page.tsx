@@ -34,14 +34,12 @@ export default function SoundboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const sounds = useQuery(api.sound.searchSounds, { searchTerm });
-  console.log({ sounds });
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundUrl, setSoundUrl] = useState("#");
 
   const togglePlay = (e: React.MouseEvent) => {
     // e.stopPropagation();
-    console.log("clicked", audioRef);
 
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -99,7 +97,6 @@ export default function SoundboardPage() {
   ): Promise<string | null> => {
     try {
       const data = await useQuery(api.sound.getSoundUrl, { fileId });
-      console.log({ data });
       return data || null;
     } catch (error) {
       console.error("Error fetching sound URL:", error);

@@ -67,7 +67,6 @@ export default function SoundDetailsPage() {
   const soundUrl = useQuery(api.sound.getSoundUrl, {
     fileId,
   });
-  console.log({ sound }, { soundUrl });
   const [Icon, setIcon] = useState<ReactNode>(null);
   const [color, setColor] = useState("bg-gray-500");
   const [isPlaying, setIsPlaying] = useState(false);
@@ -112,13 +111,10 @@ export default function SoundDetailsPage() {
     };
   }, [soundUrl]);
 
-  console.log({ soundUrl });
-
   if (!sound) return <p className="text-center py-10">Loading sound...</p>;
 
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log("123", audioRef);
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();

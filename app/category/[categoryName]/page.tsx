@@ -9,7 +9,6 @@ import { useState } from "react";
 
 export default function SoundsByCategoryPage() {
   const params = useParams();
-  console.log({ params });
   const category = params?.categoryName ?? ""; // Replace with dynamic category if needed
   const [searchInput, setSearchInput] = useState(""); // Stores user input
   const [searchTerm, setSearchTerm] = useState(""); // Stores final query on Enter key

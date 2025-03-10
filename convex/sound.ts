@@ -132,8 +132,6 @@ export const getSoundsByCategory = query({
     paginationOpts: paginationOptsValidator, // ✅ Pagination
   },
   handler: async (ctx, { category, searchTerm, paginationOpts }) => {
-    console.log({ category, searchTerm, paginationOpts });
-
     let queryBuilder = ctx.db
       .query("sounds")
       .withIndex("by_category", (q) => q.eq("category", category))
@@ -154,8 +152,6 @@ export const getSoundsByCategory = query({
         audioUrl: await ctx.storage.getUrl(sound.fileId),
       }))
     );
-
-    console.log("Returning sounds:", soundsWithUrls.length);
 
     return {
       ...result,
