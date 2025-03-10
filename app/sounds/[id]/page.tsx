@@ -112,6 +112,8 @@ export default function SoundDetailsPage() {
     };
   }, [soundUrl]);
 
+  console.log({ soundUrl });
+
   if (!sound) return <p className="text-center py-10">Loading sound...</p>;
 
   const togglePlay = (e: React.MouseEvent) => {

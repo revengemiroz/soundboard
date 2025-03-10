@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useRef, useEffect, ReactNode } from "react";
-import { Play, Pause, Download, PlusCircle } from "lucide-react";
+import {
+  Play,
+  Pause,
+  Download,
+  PlusCircle,
+  CircleCheckBig,
+} from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -64,6 +70,9 @@ interface SoundCardProps {
   category: string;
   setSheetOpen: (boolean) => void;
   fileId: Id<"_storage">;
+  setSoundboardSounds: any;
+  sound: any;
+  soundboardSounds: any;
 }
 
 export default function SoundCard({
@@ -72,6 +81,9 @@ export default function SoundCard({
   category,
   fileId,
   setSheetOpen,
+  setSoundboardSounds,
+  sound,
+  soundboardSounds,
 }: SoundCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [Icon, setIcon] = useState<ReactNode>(null);
@@ -212,9 +224,17 @@ export default function SoundCard({
 
   const router = useRouter();
 
+  const isAddedToSoundboard = soundboardSounds.some((s) => s._id == id);
   const addToSoundBoard = (e: React.MouseEvent) => {
     e.stopPropagation();
     setSheetOpen(true);
+    console.log({ soundboardSounds }, id);
+    if (isAddedToSoundboard) {
+      const filteredSounds = soundboardSounds.filter((s) => s._id !== id);
+      setSoundboardSounds(filteredSounds);
+    } else {
+      setSoundboardSounds((prev) => [...prev, sound]);
+    }
   };
 
   return (
@@ -282,11 +302,21 @@ export default function SoundCard({
           {soundUrl && (
             <span onClick={addToSoundBoard}>
               <Tooltip>
-                <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
-                  <PlusCircle size={20} />
+                <TooltipTrigger
+                  className={` ${isAddedToSoundboard ? "bg-indigo-600 hover:bg-indigo-500" : "bg-gray-200 hover:bg-gray-300"} flex items-center justify-center cursor-pointer p-3 rounded-full `}
+                >
+                  {isAddedToSoundboard ? (
+                    <CircleCheckBig className={`text-white`} size={20} />
+                  ) : (
+                    <PlusCircle size={20} />
+                  )}
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Add To Soundboard</p>
+                  {isAddedToSoundboard ? (
+                    <p>Remove from Soundboard</p>
+                  ) : (
+                    <p>Add To Soundboard</p>
+                  )}
                 </TooltipContent>
               </Tooltip>
             </span>

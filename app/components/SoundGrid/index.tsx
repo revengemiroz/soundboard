@@ -6,7 +6,12 @@ import SoundCard from "./list";
 import { useState } from "react";
 import { Search } from "lucide-react";
 
-export default function SoundList({ sheetOpen, setSheetOpen }) {
+export default function SoundList({
+  sheetOpen,
+  setSheetOpen,
+  soundboardSounds,
+  setSoundboardSounds,
+}) {
   const [searchInput, setSearchInput] = useState(""); // Stores user input
   const [searchTerm, setSearchTerm] = useState(""); // Stores final query when Enter is pressed
   const searchedSounds = useQuery(api.sound.searchSounds, { searchTerm });
@@ -55,6 +60,9 @@ export default function SoundList({ sheetOpen, setSheetOpen }) {
                 category={sound.category}
                 fileId={sound.fileId}
                 setSheetOpen={setSheetOpen}
+                setSoundboardSounds={setSoundboardSounds}
+                sound={sound}
+                soundboardSounds={soundboardSounds}
               />
             ))
           ) : (

@@ -14,9 +14,11 @@ import {
 
 import { Button } from "@/components/ui/button";
 import SheetComponent from "./components/SheetComponent";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function HomePage() {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [soundboardSounds, setSoundboardSounds] = useState([]);
 
   return (
     <>
@@ -43,11 +45,16 @@ export default function HomePage() {
               See All →
             </button> */}
           </div>
-          <SoundList sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} />
+          <SoundList
+            sheetOpen={sheetOpen}
+            setSheetOpen={setSheetOpen}
+            soundboardSounds={soundboardSounds}
+            setSoundboardSounds={setSoundboardSounds}
+          />
         </div>
 
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-          <SheetContent>
+          <SheetContent className="flex">
             <SheetHeader>
               <SheetTitle>My Soundboard</SheetTitle>
               <SheetDescription>
@@ -55,9 +62,17 @@ export default function HomePage() {
               </SheetDescription>
             </SheetHeader>
 
-            <div className=" mx-4">
-              <SheetComponent />
-            </div>
+            <ScrollArea className="flex-1 mx-4 rounded-md max-h-[85dvh] bg-muted-foreground/20 p-2">
+              {soundboardSounds.length == 0 && (
+                <h3 className=" text-center text-muted-foreground/90">
+                  You havent added an audio here yet.
+                </h3>
+              )}
+              <SheetComponent
+                soundboardSounds={soundboardSounds}
+                setSoundboardSounds={setSoundboardSounds}
+              />
+            </ScrollArea>
           </SheetContent>
         </Sheet>
       </main>
