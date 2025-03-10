@@ -92,6 +92,7 @@ export default function SoundCard({
     // Initialize Howl instance
     soundRef.current = new Howl({
       src: [soundUrl],
+      mute: false,
       html5: true, // Force HTML5 to avoid issues with CORS
       onplay: () => {
         setIsPlaying(true);
