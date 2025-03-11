@@ -6,7 +6,7 @@ import Navbar from "./components/Navigation/Navbar";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import Script from "next/script";
 import { Toaster } from "@/components/ui/sonner";
-import "@uploadthing/react/styles.css";
+// import "@uploadthing/react/styles.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -65,6 +65,8 @@ export default function UploadPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Upload Button */}
           <UploadButton
+            appearance={{ button: "bg-indigo-700 px-4" }}
+            className="rounded-md py-6 bg-muted-foreground/20 !text-indigo-600"
             endpoint="audioUploader"
             onClientUploadComplete={(res) => {
               if (res) {
@@ -91,7 +93,7 @@ export default function UploadPage() {
             label="Title"
             type="text"
             value={title}
-            placeholder="Enter"
+            placeholder="Enter a title"
             onChange={(e) => setTitle(e.target.value)}
             required
           />
