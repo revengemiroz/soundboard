@@ -57,7 +57,7 @@ export default function SoundList({
                 id={sound._id}
                 title={sound.title}
                 category={sound.category}
-                fileId={sound.fileId}
+                soundUrl={sound.uploadthingURL}
                 setSheetOpen={setSheetOpen}
                 setSoundboardSounds={setSoundboardSounds}
                 sound={sound}
