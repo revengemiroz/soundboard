@@ -87,13 +87,13 @@ export const getSoundUrl = query({
 export const searchSounds = query({
   args: { searchTerm: v.string() },
   handler: async (ctx, { searchTerm }) => {
-    const allSounds = await ctx.db.query("sounds").collect();
+    const allSounds = await ctx.db.query("soundsv1").collect();
 
     if (!searchTerm) {
       return await Promise.all(
         allSounds.map(async (sound) => ({
           ...sound,
-          audioUrl: await ctx.storage.getUrl(sound.fileId),
+          audioUrl: sound.uploadthingURL,
         }))
       );
     }
@@ -105,7 +105,7 @@ export const searchSounds = query({
     return await Promise.all(
       filteredSounds.map(async (sound) => ({
         ...sound,
-        audioUrl: await ctx.storage.getUrl(sound.fileId),
+        audioUrl: sound.uploadthingURL,
       }))
     );
   },
@@ -157,5 +157,23 @@ export const getSoundsByCategory = query({
       ...result,
       page: soundsWithUrls, // ✅ Return final filtered + paginated data
     };
+  },
+});
+
+export const uploadSoundV1 = mutation({
+  args: {
+    title: v.string(),
+    category: v.string(),
+    tags: v.array(v.string()),
+    uploadthingURL: v.string(),
+  },
+  handler: async (ctx, { title, category, tags, uploadthingURL }) => {
+    return await ctx.db.insert("soundsv1", {
+      title,
+      category,
+      tags,
+      uploadthingURL,
+      createdAt: Date.now(),
+    });
   },
 });

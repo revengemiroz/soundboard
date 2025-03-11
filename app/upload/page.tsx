@@ -6,9 +6,12 @@ import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { UploadButton } from "@/lib/uploadthing";
+// import { uploadSoundV1 } from "@/convex/sound";
 
 export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
+  const [audioURL, setAudioURL] = useState(null);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
@@ -19,10 +22,11 @@ export default function UploadPage() {
   // Convex Mutations
   const generateUploadUrl = useMutation(api.sound.generateUploadUrl);
   const uploadSound = useMutation(api.sound.uploadSound);
+  const uploadSoundV1 = useMutation(api.sound.uploadSoundV1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !title || !category) {
+    if (!audioURL || !title || !category) {
       setError("Please fill all fields and select a file.");
       return;
     }
@@ -32,33 +36,34 @@ export default function UploadPage() {
 
     try {
       // Step 1: Get a temporary upload URL from Convex
-      const uploadUrl = await generateUploadUrl();
+      // const uploadUrl = await generateUploadUrl();
 
       // Step 2: Upload file to Convex Storage
-      const formData = new FormData();
-      formData.append("file", file);
+      // const formData = new FormData();
+      // formData.append("file", file);
 
-      const response = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
-      });
+      // const response = await fetch(uploadUrl, {
+      //   method: "POST",
+      //   body: formData,
+      // });
 
-      if (!response.ok) {
-        throw new Error("Failed to upload file");
-      }
+      // if (!response.ok) {
+      //   throw new Error("Failed to upload file");
+      // }
 
       // Step 3: Get Convex Storage ID
-      const { storageId } = await response.json();
+      // const { storageId } = await response.json();
 
       // Step 4: Save Metadata in Convex Database
-      await uploadSound({
+      await uploadSoundV1({
         title,
         category,
         tags: tags
           .split(",")
           .map((tag) => tag.trim())
           .filter(Boolean),
-        fileId: storageId, // Store file ID instead of URL
+        // fileId: storageId, // Store file ID instead of URL
+        uploadthingURL: audioURL as string,
       });
 
       router.push("/");
@@ -98,7 +103,21 @@ export default function UploadPage() {
           onSubmit={handleSubmit}
           className="bg-white p-6 rounded-lg shadow space-y-6"
         >
-          <div
+          <UploadButton
+            endpoint="audioUploader"
+            onClientUploadComplete={(res) => {
+              // Do something with the response
+              console.log("Files: ", res);
+              if (res) {
+                setAudioURL(res[0]?.ufsUrl);
+              }
+            }}
+            onUploadError={(error: Error) => {
+              // Do something with the error.
+              alert(`ERROR! ${error.message}`);
+            }}
+          />
+          {/* <div
             {...getRootProps()}
             className={`border-2 border-dashed rounded-lg p-8 text-center ${
               isDragActive
@@ -113,7 +132,7 @@ export default function UploadPage() {
                 ? file.name
                 : "Drag & drop an audio file, or click to select"}
             </p>
-          </div>
+          </div> */}
 
           {error && (
             <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded">
@@ -189,7 +208,7 @@ export default function UploadPage() {
           {/* Upload Button */}
           <button
             type="submit"
-            disabled={!file || isUploading}
+            disabled={!audioURL || isUploading}
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
           >
             {isUploading ? "Uploading..." : "Upload Sound"}

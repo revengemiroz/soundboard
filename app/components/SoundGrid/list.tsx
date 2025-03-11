@@ -69,7 +69,7 @@ interface SoundCardProps {
   id: Id<"sounds">;
   category: string;
   setSheetOpen: (boolean) => void;
-  fileId: Id<"_storage">;
+  soundUrl: string;
   setSoundboardSounds: any;
   sound: any;
   soundboardSounds: any;
@@ -79,7 +79,7 @@ export default function SoundCard({
   id,
   title,
   category,
-  fileId,
+  soundUrl,
   setSheetOpen,
   setSoundboardSounds,
   sound,
@@ -91,7 +91,7 @@ export default function SoundCard({
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
+  // const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
 
   let audioElement: HTMLAudioElement | null = null;
 

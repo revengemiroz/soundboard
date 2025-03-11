@@ -72,7 +72,8 @@ function SoundCard({ id, title, category, fileId }: SoundCardProps) {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
+  // const soundUrl = useQuery(api.sound.getSoundUrl, { fileId });
+  const soundUrl = "";
 
   useEffect(() => {
     const randomIconKey = getRandomElement(Object.keys(iconComponents));

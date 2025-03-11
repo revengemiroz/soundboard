@@ -9,4 +9,12 @@ export default defineSchema({
     fileId: v.id("_storage"), // Store Convex Storage ID
     createdAt: v.number(),
   }).index("by_category", ["category", "createdAt"]),
+
+  soundsv1: defineTable({
+    title: v.string(),
+    category: v.string(),
+    uploadthingURL: v.string(),
+    tags: v.array(v.string()),
+    createdAt: v.number(),
+  }).index("by_category", ["category", "createdAt"]),
 });

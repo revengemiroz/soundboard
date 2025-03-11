@@ -64,9 +64,7 @@ export default function SoundDetailsPage() {
     id: id as string as Id<"sounds">,
   });
   const fileId = sound?.fileId;
-  const soundUrl = useQuery(api.sound.getSoundUrl, {
-    fileId,
-  });
+  const soundUrl = "";
   const [Icon, setIcon] = useState<ReactNode>(null);
   const [color, setColor] = useState("bg-gray-500");
   const [isPlaying, setIsPlaying] = useState(false);
