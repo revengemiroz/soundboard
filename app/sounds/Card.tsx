@@ -1,15 +1,25 @@
 "use client";
 
-import { Share2, Download } from "lucide-react";
+import { Share2, Download, Repeat } from "lucide-react";
 import clsx from "clsx";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-export default function SoundCard({ title, color, icon: Icon, progress }) {
+export default function SoundCard({
+  title,
+  color,
+  icon: Icon,
+  progress,
+  handlePlayPause,
+  handleDownload,
+  handlePlayRepeat,
+  isLooping,
+  handleShare,
+}) {
   return (
     <div className="flex flex-col items-center gap-2 p-4">
       {/* Sound Icon */}
-      <div className="w-20 h-20  relative">
+      <div onClick={handlePlayPause} className="w-20 h-20  relative">
         <CircularProgressbar
           value={progress}
           styles={buildStyles({
@@ -36,12 +46,25 @@ export default function SoundCard({ title, color, icon: Icon, progress }) {
 
       {/* Action Buttons */}
       <div className="flex items-center gap-4">
-        <button className="p-2 cursor-pointer text-gray-500 hover:text-indigo-500 hover:scale-110 active:scale-90 transition-all">
+        <button
+          onClick={handleShare}
+          className="p-2 cursor-pointer text-gray-500 hover:text-indigo-500 hover:scale-110 active:scale-90 transition-all"
+        >
           <Share2 size={15} />
         </button>
 
-        <button className="p-2 cursor-pointer text-gray-500 hover:text-blue-500 hover:scale-110 active:scale-90 transition-all">
+        <button
+          onClick={handleDownload}
+          className="p-2 cursor-pointer text-gray-500 hover:text-blue-500 hover:scale-110 active:scale-90 transition-all"
+        >
           <Download size={15} />
+        </button>
+
+        <button
+          onClick={handlePlayRepeat}
+          className={`p-2 cursor-pointer  ${isLooping ? "text-blue-500 hover:text-blue-600" : "text-gray-500 hover:text-blue-500"} hover:scale-110 active:scale-90 transition-all`}
+        >
+          <Repeat size={15} />
         </button>
       </div>
     </div>

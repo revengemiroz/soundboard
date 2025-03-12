@@ -113,15 +113,13 @@ export const searchSounds = query({
 
 // Fetch a sound by ID
 export const getSoundById = query({
-  args: { id: v.id("sounds") },
+  args: { id: v.id("soundsv1") },
   handler: async (ctx, { id }) => {
     const sound = await ctx.db.get(id);
     if (!sound) return null;
 
     // Ensure we get a valid file URL from Convex storage
-    const fileUrl = await ctx.storage.getUrl(sound.fileId);
-
-    return { ...sound, fileUrl };
+    return { ...sound };
   },
 });
 

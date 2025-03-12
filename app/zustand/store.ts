@@ -15,13 +15,15 @@ interface AudioStore {
   soundboard: Sound[];
   currentAudioId: string | null;
   progress: number;
-  sheetOpen: boolean; // ✅ Added back sheet state
+  sheetOpen: boolean;
+  isLooping: boolean;
   playAudio: (id: string, url: string) => void;
   stopAudio: () => void;
+  toggleRepeat: (id: string, url: string) => void;
   addToSoundboard: (sound: Sound) => void;
   removeFromSoundboard: (_id: string) => void;
   isInSoundboard: (_id: string) => boolean;
-  setSheetOpen: (open: boolean) => void; // ✅ Added function to control sheet
+  setSheetOpen: (open: boolean) => void;
 }
 
 export const useAudioStore = create<AudioStore>((set, get) => ({
@@ -29,7 +31,8 @@ export const useAudioStore = create<AudioStore>((set, get) => ({
   soundboard: [],
   currentAudioId: null,
   progress: 0,
-  sheetOpen: false, // Default state is closed
+  isLooping: false,
+  sheetOpen: false,
 
   playAudio: (id: string, url: string) => {
     get().stopAudio(); // Stop any currently playing audio
@@ -38,6 +41,7 @@ export const useAudioStore = create<AudioStore>((set, get) => ({
     newAudio.preload = "auto";
     newAudio.crossOrigin = "anonymous";
     newAudio.muted = false;
+    newAudio.loop = get().isLooping; // ✅ Apply loop setting
 
     newAudio.addEventListener("timeupdate", () => {
       if (newAudio.duration > 0) {
@@ -46,11 +50,16 @@ export const useAudioStore = create<AudioStore>((set, get) => ({
     });
 
     newAudio.addEventListener("ended", () => {
-      set({ currentAudioId: null, progress: 100 });
+      if (get().isLooping) {
+        newAudio.currentTime = 0;
+        newAudio.play(); // ✅ Manually restart if looping
+      } else {
+        set({ currentAudioId: null, progress: 100 });
+      }
     });
 
     newAudio.addEventListener("error", () => {
-      console.error("Audio playback error, resetting...");
+      // console.error("Audio playback error, resetting...");
       get().stopAudio();
     });
 
@@ -60,7 +69,7 @@ export const useAudioStore = create<AudioStore>((set, get) => ({
         set({ audio: newAudio, currentAudioId: id, progress: 0 });
       })
       .catch((error) => {
-        console.error("Audio play error:", error);
+        // console.error("Audio play error:", error);
       });
   },
 
@@ -71,6 +80,24 @@ export const useAudioStore = create<AudioStore>((set, get) => ({
       currentAudio.src = ""; // Unmount old audio
       set({ audio: null, currentAudioId: null, progress: 0 });
     }
+  },
+
+  toggleRepeat: (id: string, url: string) => {
+    set((state) => {
+      const newLoopState = !state.isLooping;
+
+      // If no audio is playing, start playback with looping
+      if (!state.currentAudioId) {
+        get().playAudio(id, url);
+      }
+
+      // Apply loop setting to existing audio
+      if (state.audio) {
+        state.audio.loop = newLoopState;
+      }
+
+      return { isLooping: newLoopState };
+    });
   },
 
   addToSoundboard: (sound: Sound) => {

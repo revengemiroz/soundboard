@@ -8,17 +8,24 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useAudioStore } from "./zustand/store";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import SheetComponent from "../app/components/SheetComponent";
+import { usePathname } from "next/navigation";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   // Zustand store functions & state
-  const { setSheetOpen, sheetOpen, soundboard } = useAudioStore();
+  const { setSheetOpen, sheetOpen, soundboard, stopAudio } = useAudioStore();
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    stopAudio(); // ✅ Stop audio when route changes
+  }, [pathname]); // ✅ Runs when the path changes
 
   return (
     <ConvexProvider client={convex}>
