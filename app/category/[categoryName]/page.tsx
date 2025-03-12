@@ -5,13 +5,32 @@ import { api } from "@/convex/_generated/api";
 import { usePaginatedQuery } from "convex/react";
 import { Scroll, Search } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+function getRandomGradient() {
+  const gradients = [
+    "from-red-500 to-orange-500",
+    "from-blue-500 to-teal-500",
+    "from-green-500 to-lime-500",
+    "from-purple-500 to-pink-500",
+    "from-indigo-500 to-cyan-500",
+    "from-yellow-500 to-amber-500",
+  ];
+
+  return gradients[Math.floor(Math.random() * gradients.length)];
+}
 
 export default function SoundsByCategoryPage() {
   const params = useParams();
   const category = params?.categoryName ?? ""; // Replace with dynamic category if needed
   const [searchInput, setSearchInput] = useState(""); // Stores user input
   const [searchTerm, setSearchTerm] = useState(""); // Stores final query on Enter key
+
+  const [gradient, setGradient] = useState("");
+
+  useEffect(() => {
+    setGradient(getRandomGradient()); // Set gradient only on the client side
+  }, []);
 
   // ✅ Fetch sounds based on category & searchTerm with pagination
   const { results, status, loadMore } = usePaginatedQuery(
@@ -27,13 +46,25 @@ export default function SoundsByCategoryPage() {
     }
   };
 
-  console.log({ results });
-
   return (
     <div className="max-w-5xl mx-auto py-8">
-      <h2 className="text-2xl capitalize font-bold mb-6 text-center">
-        {category} Sounds
-      </h2>
+      <div className="text-center mt-12 mb-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+          <span className="relative">
+            <span
+              className={`capitalize bg-gradient-to-r ${gradient} bg-clip-text text-transparent relative z-10`}
+            >
+              {category}
+            </span>
+            <span className="absolute -bottom-2 left-0 w-full h-3 bg-red-200 dark:bg-red-900/40 rounded-full -z-0 transform -rotate-1"></span>
+          </span>{" "}
+          Sounds
+        </h1>
+        <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          Explore authentic {category} sound clips for your projects, videos,
+          and creative content
+        </p>
+      </div>
 
       {/* 🔎 Search Bar */}
       <div className="mb-6 max-w-md mx-auto flex justify-center relative">

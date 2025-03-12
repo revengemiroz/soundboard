@@ -52,17 +52,16 @@ export async function generateMetadata({
   const { categoryName } = params;
 
   // Fetch sound metadata from Convex
-\
+
   return generateSEOMetadata(categoryName);
 }
 
 export default function SoundPage({
-    children,
-    params,
-  }: {
-    children: React.ReactElement;
-    params: { id: string };
-  }) {
-    return <>{children}</>;
-  }
-  
+  children,
+  params,
+}: {
+  children: React.ReactElement;
+  params: { id: string };
+}) {
+  return <>{children}</>;
+}
