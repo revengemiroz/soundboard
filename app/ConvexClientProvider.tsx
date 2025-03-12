@@ -15,7 +15,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import SheetComponent from "../app/components/SheetComponent";
 import { usePathname } from "next/navigation";
 
-const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+export const convex = new ConvexReactClient(
+  process.env.NEXT_PUBLIC_CONVEX_URL!
+);
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   // Zustand store functions & state

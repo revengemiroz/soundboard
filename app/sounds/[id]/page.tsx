@@ -40,7 +40,8 @@ export default function SoundDetailsPage() {
     isLooping,
   } = useAudioStore();
 
-  if (!sound) return <p className="text-center py-10">Loading sound...</p>;
+  if (!sound)
+    return <p className="min-h-screen text-center py-10">Loading sound...</p>;
 
   const isPlaying = currentAudioId === sound._id;
   const isAddedToSoundboard = isInSoundboard(sound._id);
