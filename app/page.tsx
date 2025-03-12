@@ -16,9 +16,12 @@ import { Button } from "@/components/ui/button";
 import SheetComponent from "./components/SheetComponent";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+import { useAudioStore } from "./zustand/store";
+
 export default function HomePage() {
-  const [sheetOpen, setSheetOpen] = useState(false);
-  const [soundboardSounds, setSoundboardSounds] = useState([]);
+  // const [soundboardSounds, setSoundboardSounds] = useState([]);
+
+  const { setSheetOpen, sheetOpen, soundboard } = useAudioStore();
 
   return (
     <>
@@ -37,20 +40,15 @@ export default function HomePage() {
           {/* <SearchBar /> */}
         </div>
         <div className="mb-8">
-          <div className="flex justify-between items-center mb-4 sm:mb-6">
-            {/* <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
+          {/* <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
               <span>⭐</span> Trending Sounds
-            </h2> */}
-            {/* <button className="text-blue-500 hover:text-blue-600 text-sm sm:text-base">
+            </h2>
+            <button className="text-blue-500 hover:text-blue-600 text-sm sm:text-base">
               See All →
-            </button> */}
-          </div>
-          <SoundList
-            sheetOpen={sheetOpen}
-            setSheetOpen={setSheetOpen}
-            soundboardSounds={soundboardSounds}
-            setSoundboardSounds={setSoundboardSounds}
-          />
+            </button>
+          </div> */}
+          <SoundList />
         </div>
 
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -63,15 +61,12 @@ export default function HomePage() {
             </SheetHeader>
 
             <ScrollArea className="flex-1 mx-4 rounded-md max-h-[85dvh] bg-muted-foreground/20 p-2">
-              {soundboardSounds.length == 0 && (
+              {soundboard.length == 0 && (
                 <h3 className=" text-center text-muted-foreground/90">
                   You havent added an audio here yet.
                 </h3>
               )}
-              <SheetComponent
-                soundboardSounds={soundboardSounds}
-                setSoundboardSounds={setSoundboardSounds}
-              />
+              <SheetComponent />
             </ScrollArea>
           </SheetContent>
         </Sheet>

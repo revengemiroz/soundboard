@@ -6,17 +6,14 @@ import SoundCard from "./list";
 import { useState } from "react";
 import { Search } from "lucide-react";
 
-export default function SoundList({
-  sheetOpen,
-  setSheetOpen,
-  soundboardSounds,
-  setSoundboardSounds,
-}) {
+export default function SoundList() {
   const [searchInput, setSearchInput] = useState(""); // Stores user input
   const [searchTerm, setSearchTerm] = useState(""); // Stores final query when Enter is pressed
   const searchedSounds = useQuery(api.sound.searchSounds, { searchTerm });
   // Check if data is still loading
   const isLoading = searchedSounds === undefined;
+
+  console.log({ searchedSounds });
 
   // Handle Enter Key Press
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -58,10 +55,7 @@ export default function SoundList({
                 title={sound.title}
                 category={sound.category}
                 soundUrl={sound.uploadthingURL}
-                setSheetOpen={setSheetOpen}
-                setSoundboardSounds={setSoundboardSounds}
                 sound={sound}
-                soundboardSounds={soundboardSounds}
               />
             ))
           ) : (
