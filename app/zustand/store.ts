@@ -2,12 +2,11 @@ import { create } from "zustand";
 
 interface Sound {
   _id: string;
-  audioUrl: string;
   category: string;
   createdAt: number;
   tags: string[];
   title: string;
-  uploadingURL: string;
+  uploadthingURL: string;
   _creationTime: number;
 }
 
@@ -101,10 +100,10 @@ export const useAudioStore = create<AudioStore>((set, get) => ({
 }));
 
 // Stop audio when tab is hidden
-if (typeof document !== "undefined") {
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      useAudioStore.getState().stopAudio();
-    }
-  });
-}
+// if (typeof document !== "undefined") {
+//   document.addEventListener("visibilitychange", () => {
+//     if (document.hidden) {
+//       useAudioStore.getState().stopAudio();
+//     }
+//   });
+// }

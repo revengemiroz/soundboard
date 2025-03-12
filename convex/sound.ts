@@ -133,7 +133,7 @@ export const getSoundsByCategory = query({
   },
   handler: async (ctx, { category, searchTerm, paginationOpts }) => {
     let queryBuilder = ctx.db
-      .query("sounds")
+      .query("soundsv1")
       .withIndex("by_category", (q) => q.eq("category", category))
       .order("desc");
     const result = await queryBuilder.paginate(paginationOpts);
@@ -149,7 +149,6 @@ export const getSoundsByCategory = query({
     const soundsWithUrls = await Promise.all(
       filteredSounds.map(async (sound) => ({
         ...sound,
-        audioUrl: await ctx.storage.getUrl(sound.fileId),
       }))
     );
 

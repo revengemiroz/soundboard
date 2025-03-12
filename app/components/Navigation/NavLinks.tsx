@@ -9,6 +9,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useAudioStore } from "@/app/zustand/store";
 
 interface NavLinkProps {
   to: string;
@@ -34,13 +35,35 @@ function NavLink({ to, children, isNew }: NavLinkProps) {
 
 export default function NavLinks() {
   const router = useRouter();
+  const {
+    playAudio,
+    stopAudio,
+    progress,
+    currentAudioId,
+    addToSoundboard,
+    removeFromSoundboard,
+    isInSoundboard,
+    soundboard,
+    setSheetOpen,
+  } = useAudioStore();
+
   return (
     <div className="hidden md:flex items-center space-x-1">
       {/* <NavLink to="/">HOME</NavLink> */}
       {/* <NavLink to="/new" isNew>
         NEW
       </NavLink> */}
-      <NavLink to="/create-soundboard">CREATE SOUNDBOARD</NavLink>
+      <button
+        onClick={() => setSheetOpen(true)}
+        className="hover:text-indigo-600  relative px-3 py-2 text-sm text-gray-700 font-medium"
+      >
+        <span className="cursor-pointer">MY SOUNDBOARD</span>
+        <span
+          className={`absolute -top-2 -right-2 bg-red-500 text-white text-xs  ${soundboard.length > 0 ? "px-[7px] py-[2px] flex items-center justify-center" : "px-1.5 py-0.5"}  rounded-full`}
+        >
+          {soundboard.length > 0 ? soundboard.length : "New"}
+        </span>
+      </button>
       <NavLink to="/trends">TRENDS</NavLink>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

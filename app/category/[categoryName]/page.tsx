@@ -27,6 +27,8 @@ export default function SoundsByCategoryPage() {
     }
   };
 
+  console.log({ results });
+
   return (
     <div className="max-w-5xl mx-auto py-8">
       <h2 className="text-2xl capitalize font-bold mb-6 text-center">
@@ -61,7 +63,8 @@ export default function SoundsByCategoryPage() {
                 id={sound._id}
                 title={sound.title}
                 category={sound.category}
-                fileId={sound.fileId}
+                soundUrl={sound.uploadthingURL}
+                sound={sound}
               />
             ))
           ) : (

@@ -52,6 +52,7 @@ function Index() {
     stopAudio,
     currentAudioId,
   } = useAudioStore();
+  console.log({ soundboard });
 
   // State to store assigned icons & colors for each sound
   const [soundStyles, setSoundStyles] = useState<
@@ -131,7 +132,9 @@ const Card = ({
         {Icon && (
           <button
             onClick={() =>
-              isPlaying ? stopAudio() : playAudio(sound._id, sound.audioUrl)
+              isPlaying
+                ? stopAudio()
+                : playAudio(sound._id, sound.uploadthingURL)
             }
           >
             <Icon

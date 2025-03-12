@@ -31,6 +31,15 @@ import {
 } from "lucide-react";
 
 import { useAudioStore } from "@/app/zustand/store";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import SheetComponent from "../SheetComponent";
 
 const iconComponents = {
   Music,
@@ -67,13 +76,15 @@ interface SoundCardProps {
     createdAt: number;
     tags: string[];
     title: string;
-    uploadingURL: string;
+    uploadthingURL: string;
     _creationTime: number;
   };
 }
 
 export default function SoundCard({ sound }: SoundCardProps) {
-  const { _id, title, category, audioUrl } = sound;
+  const { _id, title, category, uploadthingURL } = sound;
+  console.log({ sound });
+
   const router = useRouter();
 
   // Zustand store functions & state
@@ -86,10 +97,14 @@ export default function SoundCard({ sound }: SoundCardProps) {
     removeFromSoundboard,
     isInSoundboard,
     setSheetOpen,
+    sheetOpen,
+    soundboard,
   } = useAudioStore();
 
   const isPlaying = currentAudioId === _id;
   const isAddedToSoundboard = isInSoundboard(_id);
+
+  console.log({ sheetOpen });
 
   // Random icon and color for each card
   const [Icon] = useState(() =>
@@ -99,15 +114,15 @@ export default function SoundCard({ sound }: SoundCardProps) {
 
   const handlePlayPause = (e: React.MouseEvent) => {
     e.stopPropagation();
-    isPlaying ? stopAudio() : playAudio(_id, audioUrl);
+    isPlaying ? stopAudio() : playAudio(_id, uploadthingURL);
   };
 
   const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!audioUrl) return;
+    if (!uploadthingURL) return;
 
     try {
-      const response = await fetch(audioUrl);
+      const response = await fetch(uploadthingURL);
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
 
@@ -165,7 +180,7 @@ export default function SoundCard({ sound }: SoundCardProps) {
 
         {/* Buttons: Play/Pause, Download, Add to Soundboard */}
         <div className="flex items-center gap-4 mt-3">
-          {audioUrl && (
+          {uploadthingURL && (
             <button
               className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"
               onClick={handlePlayPause}
@@ -174,7 +189,7 @@ export default function SoundCard({ sound }: SoundCardProps) {
             </button>
           )}
 
-          {audioUrl && (
+          {uploadthingURL && (
             <span onClick={handleDownload}>
               <Tooltip>
                 <TooltipTrigger className="bg-gray-200 flex items-center justify-center cursor-pointer p-3 rounded-full hover:bg-gray-300">
@@ -187,7 +202,7 @@ export default function SoundCard({ sound }: SoundCardProps) {
             </span>
           )}
 
-          {audioUrl && (
+          {uploadthingURL && (
             <span onClick={handleAddToSoundboard}>
               <Tooltip>
                 <TooltipTrigger
