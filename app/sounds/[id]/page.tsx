@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   Mic,
   CirclePlus,
+  Copy,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -129,34 +130,33 @@ export default function SoundDetailsPage() {
         </div>
 
         {/* Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto mt-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mx-auto mt-6 w-full ">
+          {/* Copy Link Button */}
           <button
             onClick={handleShare}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-md 
-            border-2 border-indigo-700 text-indigo-700 
-            bg-transparent transition-all duration-300 
-            hover:bg-indigo-700 hover:text-white hover:shadow-md 
-            active:scale-95 cursor-pointer"
+            className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-md 
+    border-2 border-indigo-700 text-indigo-700 bg-transparent transition-all duration-300 
+    hover:bg-indigo-700 hover:text-white hover:shadow-md active:scale-95 cursor-pointer"
           >
-            <Share className="h-5 w-5" />
+            <Copy className="h-5 w-5" />
             Copy Link
           </button>
 
+          {/* Download Button */}
           <button
             onClick={handleDownload}
-            className="flex items-center justify-center gap-2 px-5 py-3 rounded-md 
-            border-2 border-indigo-700 text-indigo-700 
-            bg-transparent transition-all duration-300 
-            hover:bg-indigo-700 hover:text-white hover:shadow-md 
-            active:scale-95 cursor-pointer"
+            className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-md 
+    border-2 border-indigo-700 text-indigo-700 bg-transparent transition-all duration-300 
+    hover:bg-indigo-700 hover:text-white hover:shadow-md active:scale-95 cursor-pointer"
           >
             <Download className="h-5 w-5" />
             Download MP3
           </button>
 
+          {/* Soundboard Button - Always Full Width */}
           <button
             onClick={handleAddToSoundboard}
-            className={`flex items-center w-full col-span-2 cursor-pointer justify-center gap-2 px-4 py-3 rounded-md transition-all ${
+            className={`flex items-center w-full sm:col-span-2 cursor-pointer justify-center gap-2 px-4 py-3 rounded-md transition-all ${
               isAddedToSoundboard
                 ? "bg-gray-400 hover:bg-gray-500 text-white"
                 : "bg-indigo-600 hover:bg-indigo-700 text-white"
