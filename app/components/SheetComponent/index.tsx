@@ -52,7 +52,6 @@ function Index() {
     stopAudio,
     currentAudioId,
   } = useAudioStore();
-  console.log({ soundboard });
 
   // State to store assigned icons & colors for each sound
   const [soundStyles, setSoundStyles] = useState<

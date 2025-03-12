@@ -19,6 +19,44 @@ import { Id } from "@/convex/_generated/dataModel";
 import Card from "../Card";
 import { toast } from "sonner";
 import { useAudioStore } from "@/app/zustand/store";
+import {
+  Music,
+  Mic2,
+  Headphones,
+  Radio,
+  Volume2,
+  Disc,
+  Heart,
+  Star,
+  Zap,
+} from "lucide-react";
+
+const iconComponents = {
+  Music,
+  Mic2,
+  Headphones,
+  Radio,
+  Volume2,
+  Disc,
+  Heart,
+  Star,
+  Zap,
+};
+const colors = [
+  "bg-indigo-600",
+  "bg-pink-500",
+  "bg-amber-500",
+  "bg-red-500",
+  "bg-emerald-500",
+  "bg-blue-500",
+  "bg-purple-500",
+  "bg-cyan-500",
+  "bg-orange-500",
+];
+
+function getRandomElement<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)];
+}
 
 export default function SoundDetailsPage() {
   const { id } = useParams();
@@ -27,6 +65,12 @@ export default function SoundDetailsPage() {
   const sound = useQuery(api.sound.getSoundById, {
     id: id as string as Id<"soundsv1">,
   });
+
+  // Random icon and color for each card
+  const [Icon] = useState(() =>
+    getRandomElement(Object.values(iconComponents))
+  );
+  const [color] = useState(() => getRandomElement(colors));
 
   const {
     playAudio,
@@ -118,8 +162,8 @@ export default function SoundDetailsPage() {
         <div className="bg-gray-100 relative border rounded-md p-6 flex flex-col justify-center items-center">
           <Card
             progress={progress}
-            icon={Mic} // Default icon
-            color={"bg-indigo-600"} // Default color
+            icon={Icon} // Default icon
+            color={color} // Default color
             title={sound.title}
             handlePlayPause={handlePlayPause}
             handleDownload={handleDownload}

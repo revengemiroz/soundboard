@@ -11,8 +11,6 @@ export const ourFileRouter = {
     },
   }).onUploadComplete(async ({ metadata, file }) => {
     // This code RUNS ON YOUR SERVER after upload
-
-    console.log("file url", file);
   }),
 } satisfies FileRouter;
 

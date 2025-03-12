@@ -83,7 +83,6 @@ interface SoundCardProps {
 
 export default function SoundCard({ sound }: SoundCardProps) {
   const { _id, title, category, uploadthingURL } = sound;
-  console.log({ sound });
 
   const router = useRouter();
 
@@ -103,8 +102,6 @@ export default function SoundCard({ sound }: SoundCardProps) {
 
   const isPlaying = currentAudioId === _id;
   const isAddedToSoundboard = isInSoundboard(_id);
-
-  console.log({ sheetOpen });
 
   // Random icon and color for each card
   const [Icon] = useState(() =>

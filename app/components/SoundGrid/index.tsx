@@ -13,8 +13,6 @@ export default function SoundList() {
   // Check if data is still loading
   const isLoading = searchedSounds === undefined;
 
-  console.log({ searchedSounds });
-
   // Handle Enter Key Press
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
