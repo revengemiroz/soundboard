@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import SoundCard from "./list";
-import { Scroll, Search, Loader2 } from "lucide-react";
+import { Search, Loader2, ArrowDown } from "lucide-react";
 
 export default function SoundList() {
   const [searchInput, setSearchInput] = useState<string>(""); // Input state
@@ -79,7 +79,7 @@ export default function SoundList() {
       {status === "CanLoadMore" && (
         <div className="flex justify-center py-6 mt-20">
           <button
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+            className="flex cursor-pointer items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
             onClick={() => loadMore(10)}
             disabled={isFetchingMore}
           >
@@ -89,7 +89,7 @@ export default function SoundList() {
               </>
             ) : (
               <>
-                <Scroll className="w-5 h-5" />
+                <ArrowDown className="w-5 h-5" />
                 Load More
               </>
             )}

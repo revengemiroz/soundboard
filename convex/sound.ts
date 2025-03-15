@@ -86,7 +86,7 @@ export const getSoundUrl = query({
 // });
 export const searchSounds = query({
   args: {
-    searchTerm: v.string(),
+    searchTerm: v.optional(v.string()),
     paginationOpts: paginationOptsValidator, // ✅ Added pagination
   },
   handler: async (ctx, { searchTerm, paginationOpts }) => {
