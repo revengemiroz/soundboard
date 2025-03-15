@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Upload, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { UploadButton } from "@/lib/uploadthing";
+import { useAudioStore } from "../zustand/store";
 
 export default function UploadPage() {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
@@ -15,7 +17,6 @@ export default function UploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const router = useRouter();
   const uploadSoundV1 = useMutation(api.sound.uploadSoundV1);
 
   // Handles form submission
@@ -48,6 +49,21 @@ export default function UploadPage() {
       setIsUploading(false);
     }
   };
+
+  const isAdmin = useAudioStore((state) => state.isAdmin);
+
+  useEffect(() => {
+    if (!isAdmin) {
+      router.push("/");
+    }
+  }, [isAdmin, router]);
+
+  if (!isAdmin)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Not admin
+      </div>
+    ); // Prevent rendering before
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -109,7 +125,7 @@ export default function UploadPage() {
               "Movies",
               "Music",
               "Viral",
-              "Sound Effects",
+              "Sound-Effects",
               "Discord",
               "Tiktok",
               "Nepali",

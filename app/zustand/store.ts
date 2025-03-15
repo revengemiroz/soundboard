@@ -17,6 +17,7 @@ interface AudioStore {
   progress: number;
   sheetOpen: boolean;
   isLooping: boolean;
+  isAdmin: boolean;
   playAudio: (id: string, url: string) => void;
   stopAudio: () => void;
   toggleRepeat: (id: string, url: string) => void;
@@ -24,113 +25,112 @@ interface AudioStore {
   removeFromSoundboard: (_id: string) => void;
   isInSoundboard: (_id: string) => boolean;
   setSheetOpen: (open: boolean) => void;
+  setIsAdmin: (value: boolean) => void;
 }
 
-export const useAudioStore = create<AudioStore>((set, get) => ({
-  audio: null,
-  soundboard: [],
-  currentAudioId: null,
-  progress: 0,
-  isLooping: false,
-  sheetOpen: false,
+export const useAudioStore = create<AudioStore>((set, get) => {
+  // Retrieve isAdmin from localStorage (default to false if not found)
+  const storedIsAdmin =
+    typeof window !== "undefined" ? localStorage.getItem("isAdmin") : "false";
 
-  playAudio: (id: string, url: string) => {
-    get().stopAudio(); // Stop any currently playing audio
+  return {
+    audio: null,
+    soundboard: [],
+    currentAudioId: null,
+    progress: 0,
+    isLooping: false,
+    sheetOpen: false,
+    isAdmin: storedIsAdmin === "true", // Convert to boolean
 
-    const newAudio = new Audio(url);
-    newAudio.preload = "auto";
-    newAudio.crossOrigin = "anonymous";
-    newAudio.muted = false;
-    newAudio.loop = get().isLooping; // ✅ Apply loop setting
+    playAudio: (id: string, url: string) => {
+      get().stopAudio(); // Stop any currently playing audio
 
-    newAudio.addEventListener("timeupdate", () => {
-      if (newAudio.duration > 0) {
-        set({ progress: (newAudio.currentTime / newAudio.duration) * 100 });
-      }
-    });
+      const newAudio = new Audio(url);
+      newAudio.preload = "auto";
+      newAudio.crossOrigin = "anonymous";
+      newAudio.muted = false;
+      newAudio.loop = get().isLooping;
 
-    newAudio.addEventListener("ended", () => {
-      if (get().isLooping) {
-        newAudio.currentTime = 0;
-        newAudio.play(); // ✅ Manually restart if looping
-      } else {
-        set({ currentAudioId: null, progress: 100 });
-      }
-    });
-
-    newAudio.addEventListener("error", () => {
-      // console.error("Audio playback error, resetting...");
-      get().stopAudio();
-    });
-
-    newAudio
-      .play()
-      .then(() => {
-        set({ audio: newAudio, currentAudioId: id, progress: 0 });
-      })
-      .catch((error) => {
-        // console.error("Audio play error:", error);
+      newAudio.addEventListener("timeupdate", () => {
+        if (newAudio.duration > 0) {
+          set({ progress: (newAudio.currentTime / newAudio.duration) * 100 });
+        }
       });
-  },
 
-  stopAudio: () => {
-    const currentAudio = get().audio;
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio.src = ""; // Unmount old audio
-      set({ audio: null, currentAudioId: null, progress: 0 });
-    }
-  },
+      newAudio.addEventListener("ended", () => {
+        if (get().isLooping) {
+          newAudio.currentTime = 0;
+          newAudio.play();
+        } else {
+          set({ currentAudioId: null, progress: 100 });
+        }
+      });
 
-  toggleRepeat: (id: string, url: string) => {
-    set((state) => {
-      const newLoopState = !state.isLooping;
+      newAudio.addEventListener("error", () => {
+        get().stopAudio();
+      });
 
-      // If no audio is playing, start playback with looping
-      if (!state.currentAudioId) {
-        get().playAudio(id, url);
+      newAudio
+        .play()
+        .then(() => {
+          set({ audio: newAudio, currentAudioId: id, progress: 0 });
+        })
+        .catch(() => {});
+    },
+
+    stopAudio: () => {
+      const currentAudio = get().audio;
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.src = "";
+        set({ audio: null, currentAudioId: null, progress: 0 });
       }
+    },
 
-      // Apply loop setting to existing audio
-      if (state.audio) {
-        state.audio.loop = newLoopState;
+    toggleRepeat: (id: string, url: string) => {
+      set((state) => {
+        const newLoopState = !state.isLooping;
+
+        if (!state.currentAudioId) {
+          get().playAudio(id, url);
+        }
+
+        if (state.audio) {
+          state.audio.loop = newLoopState;
+        }
+
+        return { isLooping: newLoopState };
+      });
+    },
+
+    addToSoundboard: (sound: Sound) => {
+      if (!get().isInSoundboard(sound._id)) {
+        set((state) => ({
+          soundboard: [...state.soundboard, sound],
+        }));
       }
+    },
 
-      return { isLooping: newLoopState };
-    });
-  },
-
-  addToSoundboard: (sound: Sound) => {
-    if (!get().isInSoundboard(sound._id)) {
+    removeFromSoundboard: (_id: string) => {
       set((state) => ({
-        soundboard: [...state.soundboard, sound],
+        soundboard: state.soundboard.filter((sound) => sound._id !== _id),
       }));
-    }
-  },
+      if (get().currentAudioId === _id) {
+        get().stopAudio();
+      }
+    },
 
-  removeFromSoundboard: (_id: string) => {
-    set((state) => ({
-      soundboard: state.soundboard.filter((sound) => sound._id !== _id),
-    }));
-    if (get().currentAudioId === _id) {
-      get().stopAudio();
-    }
-  },
+    isInSoundboard: (_id: string) => {
+      return get().soundboard.some((sound) => sound._id === _id);
+    },
 
-  isInSoundboard: (_id: string) => {
-    return get().soundboard.some((sound) => sound._id === _id);
-  },
+    setSheetOpen: (open: boolean) => {
+      set({ sheetOpen: open });
+    },
 
-  setSheetOpen: (open: boolean) => {
-    set({ sheetOpen: open });
-  },
-}));
-
-// Stop audio when tab is hidden
-// if (typeof document !== "undefined") {
-//   document.addEventListener("visibilitychange", () => {
-//     if (document.hidden) {
-//       useAudioStore.getState().stopAudio();
-//     }
-//   });
-// }
+    setIsAdmin: (value: boolean) => {
+      localStorage.setItem("isAdmin", String(value)); // Store as string in localStorage
+      set({ isAdmin: value });
+    },
+  };
+});
