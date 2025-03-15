@@ -102,7 +102,7 @@ export const searchSounds = query({
       );
     } else {
       // Apply descending order for non-search case
-      orderedQuery = preIndexQuery.withIndex("by_creationTime").order("desc");
+      orderedQuery = preIndexQuery.order("desc");
     }
 
     // Get paginated results

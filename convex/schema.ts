@@ -18,8 +18,7 @@ export default defineSchema({
     createdAt: v.number(),
   })
     .searchIndex("by_title", { searchField: "title" })
-    .index("by_category", ["category", "createdAt"])
-    .index("by_creationTime", ["_creationTime"]),
+    .index("by_category", ["category", "createdAt"]),
 
   requests: defineTable({
     name: v.string(),
