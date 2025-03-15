@@ -105,14 +105,14 @@ const Card = ({
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-4 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all">
-      <div className="w-15 h-15 relative">
+      <div className="w-15 h-15 relative ">
         {/* Remove button */}
         <div
           onClick={() => {
             removeSounds(sound._id);
             stopAudio();
           }}
-          className="absolute cursor-pointer hover:scale-105 active:scale-90 transition-all top-[-8px] bg-gray-300 rounded-full p-1 right-[-40px]"
+          className="absolute cursor-pointer hover:scale-105 active:scale-90 transition-all top-[-12px] md:top-[-8px] bg-gray-300 rounded-full p-1 right-[-25px] md:right-[-40px]"
         >
           <X className="w-3 h-3" />
         </div>
@@ -145,7 +145,7 @@ const Card = ({
 
       {/* Title & Category */}
       <div className="text-center flex flex-col gap-2 p-0 mt-4">
-        <span className="text-lg !p-0 leading-4.5 font-semibold capitalize m-0">
+        <span className="text-sm md:text-lg !p-0 leading-3.5 font-semibold capitalize m-0">
           {sound.title}
         </span>
         <p className="text-sm text-gray-500 capitalize">{sound.category}</p>
