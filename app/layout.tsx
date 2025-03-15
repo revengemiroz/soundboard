@@ -43,8 +43,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-muted/90`}
       >
-        <Navbar />
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ConvexClientProvider>
+          <Navbar />
+          {children}
+        </ConvexClientProvider>
         <FooterSection />
         <Toaster />
       </body>

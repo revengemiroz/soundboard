@@ -4,12 +4,17 @@ import React from "react";
 export default function FooterLinks() {
   const links = [
     {
-      title: "Quick Links",
+      title: "Category Links",
       items: [
-        { label: "Home", to: "/" },
-        { label: "Trending", to: "/trending" },
-        { label: "Categories", to: "/categories" },
-        { label: "Upload", to: "/upload" },
+        { label: "Categories Memes", to: "/category/memes" },
+        { label: "Categories Anime", to: "/category/anime" },
+        { label: "Categories Movies", to: "/category/movies" },
+        { label: "Categories Music", to: "/category/music" },
+        { label: "Categories Sound Effects", to: "/category/sound-effects" },
+        { label: "Categories Discord Soundboard", to: "/category/discord" },
+        { label: "Categories Viral Soundboard", to: "/category/viral" },
+        { label: "Categories Tiktok Soundboard", to: "/category/tiktok" },
+        { label: "Categories Nepali Soundboard", to: "/category/nepali" },
       ],
     },
     {

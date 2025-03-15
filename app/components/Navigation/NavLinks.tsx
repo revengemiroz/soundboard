@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -10,6 +10,7 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useAudioStore } from "@/app/zustand/store";
+import { RequestSoundModal } from "@/app/components/Request";
 
 interface NavLinkProps {
   to: string;
@@ -35,6 +36,7 @@ function NavLink({ to, children, isNew }: NavLinkProps) {
 
 export default function NavLinks() {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const {
     playAudio,
     stopAudio,
@@ -64,7 +66,6 @@ export default function NavLinks() {
           {soundboard.length > 0 ? soundboard.length : "New"}
         </span>
       </button>
-      <NavLink to="/trends">TRENDS</NavLink>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -134,6 +135,15 @@ export default function NavLinks() {
       </DropdownMenu>
       {/* <NavLink to="/create">CREATE</NavLink> */}
       <NavLink to="/about">ABOUT</NavLink>
+
+      <button
+        onClick={() => setOpen(true)}
+        className="hover:text-indigo-600 cursor-pointer relative px-3 py-2 text-sm text-gray-700 font-medium"
+      >
+        REQUEST SOUND
+      </button>
+
+      <RequestSoundModal open={open} onOpenChange={setOpen} />
       {/* {<NavLink to="/admin">ADMIN</NavLink>} */}
     </div>
   );

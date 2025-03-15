@@ -17,4 +17,10 @@ export default defineSchema({
     tags: v.array(v.string()),
     createdAt: v.number(),
   }).index("by_category", ["category", "createdAt"]),
+
+  requests: defineTable({
+    name: v.string(),
+    url: v.string(),
+    createdAt: v.number(),
+  }).index("by_createdAt", ["createdAt"]),
 });
