@@ -87,34 +87,41 @@ export const getSoundUrl = query({
 export const searchSounds = query({
   args: {
     searchTerm: v.optional(v.string()),
-    paginationOpts: paginationOptsValidator, // ✅ Added pagination
+    paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, { searchTerm, paginationOpts }) => {
-    let queryBuilder = ctx.db.query("soundsv1").order("desc");
+    // Stage 1: Start with the table query
+    const preIndexQuery = ctx.db.query("soundsv1");
 
-    // ✅ Step 1: Paginate the query first
-    const result = await queryBuilder.paginate(paginationOpts);
-
-    // ✅ Step 2: Apply search filtering AFTER pagination
-    let filteredSounds = result.page;
+    // Stage 2: Apply search index or ordering
+    let orderedQuery;
     if (searchTerm) {
-      filteredSounds = filteredSounds.filter((sound) =>
-        sound.title.toLowerCase().includes(searchTerm.toLowerCase())
+      // Search index automatically creates an OrderedQuery (by relevance)
+      orderedQuery = preIndexQuery.withSearchIndex("by_title", (q) =>
+        q.search("title", searchTerm)
       );
+    } else {
+      // Apply descending order for non-search case
+      orderedQuery = preIndexQuery.withIndex("by_creationTime").order("desc");
     }
 
-    // ✅ Step 3: Fetch audio URLs for final results
-    const soundsWithUrls = filteredSounds.map((sound) => ({
+    // Get paginated results
+    const result = await orderedQuery.paginate(paginationOpts);
+
+    // Transform results to add audio URLs
+    const soundsWithUrls = result.page.map((sound) => ({
       ...sound,
       audioUrl: sound.uploadthingURL,
     }));
 
+    // Return the transformed results with pagination info
     return {
       ...result,
-      page: soundsWithUrls, // ✅ Return paginated + filtered data
+      page: soundsWithUrls,
     };
   },
 });
+
 // Fetch a sound by ID
 export const getSoundById = query({
   args: { id: v.id("soundsv1") },

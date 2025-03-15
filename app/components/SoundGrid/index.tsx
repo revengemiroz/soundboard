@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import SoundCard from "./list";
@@ -9,6 +9,7 @@ import { Search, Loader2, ArrowDown } from "lucide-react";
 export default function SoundList() {
   const [searchInput, setSearchInput] = useState<string>(""); // Input state
   const [searchTerm, setSearchTerm] = useState<string>(""); // Query state
+  const lastElementRef = useRef<HTMLDivElement | null>(null); // Ref for last element
 
   // Fetch paginated sounds from Convex
   const { results, status, loadMore } = usePaginatedQuery(
@@ -28,6 +29,20 @@ export default function SoundList() {
     [searchInput]
   );
 
+  // Smooth Scroll After Loading More
+  useEffect(() => {
+    if (isFetchingMore) return; // Prevent scrolling while still fetching
+
+    if (lastElementRef.current) {
+      setTimeout(() => {
+        lastElementRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 300); // Delay to let new items load
+    }
+  }, [results]); // Run when new results are added
+
   return (
     <div className="max-w-5xl mx-auto py-8">
       {/* Header */}
@@ -42,7 +57,7 @@ export default function SoundList() {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           onKeyDown={handleSearch}
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
+          className="w-full pl-10 bg-white pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
@@ -56,14 +71,15 @@ export default function SoundList() {
       {/* Sound Grid */}
       {!isLoading && results?.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {results.map((sound) => (
+          {results.map((sound, index) => (
             <SoundCard
-              key={sound._id}
+              key={index}
               id={sound._id}
               title={sound.title}
               category={sound.category}
               soundUrl={sound.uploadthingURL}
               sound={sound}
+              ref={index === results.length - 1 ? lastElementRef : null} // Attach ref to last element
             />
           ))}
         </div>
@@ -76,7 +92,7 @@ export default function SoundList() {
       )}
 
       {/* Load More Button */}
-      {status === "CanLoadMore" && (
+      {status === "CanLoadMore" && results.length >= 20 && (
         <div className="flex justify-center py-6 mt-20">
           <button
             className="flex cursor-pointer items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"

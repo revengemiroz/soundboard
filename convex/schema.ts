@@ -16,7 +16,10 @@ export default defineSchema({
     uploadthingURL: v.string(),
     tags: v.array(v.string()),
     createdAt: v.number(),
-  }).index("by_category", ["category", "createdAt"]),
+  })
+    .searchIndex("by_title", { searchField: "title" })
+    .index("by_category", ["category", "createdAt"])
+    .index("by_creationTime", ["_creationTime"]),
 
   requests: defineTable({
     name: v.string(),
