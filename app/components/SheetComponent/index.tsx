@@ -145,7 +145,7 @@ const Card = ({
 
       {/* Title & Category */}
       <div className="text-center flex flex-col gap-2 p-0 mt-4">
-        <span className="text-sm md:text-lg !p-0 leading-3.5 font-semibold capitalize m-0">
+        <span className="text-sm md:text-lg !p-0 leading-4 font-semibold capitalize m-0">
           {sound.title}
         </span>
         <p className="text-sm text-gray-500 capitalize">{sound.category}</p>
