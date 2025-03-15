@@ -1,66 +1,99 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useState, useCallback } from "react";
+import { usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import SoundCard from "./list";
-import { useState } from "react";
-import { Search } from "lucide-react";
+import { Scroll, Search, Loader2 } from "lucide-react";
 
 export default function SoundList() {
-  const [searchInput, setSearchInput] = useState(""); // Stores user input
-  const [searchTerm, setSearchTerm] = useState(""); // Stores final query when Enter is pressed
-  const searchedSounds = useQuery(api.sound.searchSounds, { searchTerm });
-  // Check if data is still loading
-  const isLoading = searchedSounds === undefined;
+  const [searchInput, setSearchInput] = useState<string>(""); // Input state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Query state
 
-  // Handle Enter Key Press
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      setSearchTerm(searchInput); // Set search query on Enter
-    }
-  };
+  // Fetch paginated sounds from Convex
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.sound.searchSounds,
+    { searchTerm },
+    { initialNumItems: 20 }
+  );
+
+  const isLoading = status === "LoadingFirstPage";
+  const isFetchingMore = status === "LoadingMore";
+
+  // Handle Enter Key Press for Search
+  const handleSearch = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") setSearchTerm(searchInput.trim());
+    },
+    [searchInput]
+  );
 
   return (
     <div className="max-w-5xl mx-auto py-8">
+      {/* Header */}
       <h2 className="text-2xl font-bold mb-6 text-center">Sound Library</h2>
 
-      {/* Search Bar (Triggers Search on Enter) */}
-      <div className="mb-6 max-w-md mx-auto flex justify-center relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+      {/* Search Bar */}
+      <div className="relative mb-6 max-w-md mx-auto flex items-center">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
         <input
           type="text"
           placeholder="Search for sounds..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          onKeyDown={handleKeyPress} // Listen for Enter Key
-          className="w-full max-w-md pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          onKeyDown={handleSearch}
+          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
-      {/* Show Spinner while loading */}
-      {isLoading ? (
-        <div className="flex py-48 justify-center">
-          <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      {/* Loading Spinner (Initial Load) */}
+      {isLoading && (
+        <div className="flex justify-center py-48">
+          <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+        </div>
+      )}
+
+      {/* Sound Grid */}
+      {!isLoading && results?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {results.map((sound) => (
+            <SoundCard
+              key={sound._id}
+              id={sound._id}
+              title={sound.title}
+              category={sound.category}
+              soundUrl={sound.uploadthingURL}
+              sound={sound}
+            />
+          ))}
         </div>
       ) : (
-        // Grid Layout
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {searchedSounds.length > 0 ? (
-            searchedSounds.map((sound) => (
-              <SoundCard
-                key={sound._id}
-                id={sound._id}
-                title={sound.title}
-                category={sound.category}
-                soundUrl={sound.uploadthingURL}
-                sound={sound}
-              />
-            ))
-          ) : (
-            <p className="col-span-full text-center py-48 text-gray-500">
-              No sounds found for "{searchTerm}"
-            </p>
-          )}
+        !isLoading && (
+          <p className="col-span-full text-center py-48 text-gray-500">
+            No sounds found for "{searchTerm}"
+          </p>
+        )
+      )}
+
+      {/* Load More Button */}
+      {status === "CanLoadMore" && (
+        <div className="flex justify-center py-6 mt-20">
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+            onClick={() => loadMore(10)}
+            disabled={isFetchingMore}
+          >
+            {isFetchingMore ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" /> Loading...
+              </>
+            ) : (
+              <>
+                <Scroll className="w-5 h-5" />
+                Load More
+              </>
+            )}
+          </button>
         </div>
       )}
     </div>
