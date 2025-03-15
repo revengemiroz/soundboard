@@ -73,7 +73,7 @@ export default function NavLinks() {
             className="flex items-center cursor-pointer no-underline text-sm font-medium uppercase"
           >
             Categories
-            <ChevronDown className="ml-1 h-4 w-4" />
+            <ChevronDown className="ml-[-5px]  h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-48">
