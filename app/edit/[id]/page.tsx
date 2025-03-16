@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams, useRouter } from "next/navigation";
+import { useAudioStore } from "@/app/zustand/store";
 
 const EditSound = () => {
   const router = useRouter();
@@ -13,6 +14,20 @@ const EditSound = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
+  const isAdmin = useAudioStore((state) => state.isAdmin);
+
+  useEffect(() => {
+    if (!isAdmin) {
+      router.push("/");
+    }
+  }, [isAdmin, router]);
+
+  if (!isAdmin)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Not admin
+      </div>
+    ); // Prevent rendering before
 
   useEffect(() => {
     if (sound) {
