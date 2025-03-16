@@ -60,15 +60,15 @@ export default function SoundsByCategoryPage() {
           </span>{" "}
           Sounds
         </h1>
-        <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+        <p className="text-slate-600 px-4 dark:text-slate-400 max-w-2xl mx-auto">
           Explore authentic {category} sound clips for your projects, videos,
           and creative content
         </p>
       </div>
 
       {/* 🔎 Search Bar */}
-      <div className="mb-6 max-w-md mx-auto flex justify-center relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+      <div className="mb-6 px-4 max-w-md mx-auto  flex justify-center relative">
+        <Search className="absolute left-7 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
         <input
           type="text"
           placeholder="Search for sounds..."
@@ -86,7 +86,7 @@ export default function SoundsByCategoryPage() {
         </div>
       ) : (
         // 📌 Grid Layout
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 px-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {results.length > 0 ? (
             results.map((sound) => (
               <SoundCard

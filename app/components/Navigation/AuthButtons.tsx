@@ -1,26 +1,22 @@
-import { useAudioStore } from "@/app/zustand/store";
 import Link from "next/link";
 import React from "react";
 
 export default function AuthButtons() {
-  const isAdmin = useAudioStore((state) => state.isAdmin);
   //   if (isAuthenticated) {
   return (
     <div className="hidden md:flex items-center space-x-2">
       {/* <button
         //   onClick={logout}
         className="px-3 py-1.5 text-sm text-white bg-gray-800 hover:bg-gray-900 rounded"
-      >
-        Logout
-      </button> */}
-      {isAdmin && (
-        <Link
-          href="/upload"
-          className="px-3 py-1.5 text-sm text-white bg-red-600 hover:bg-red-700 rounded"
         >
-          Upload
-        </Link>
-      )}
+        Logout
+        </button> */}
+      <Link
+        href="/upload"
+        className="px-3 py-1.5 text-sm text-white bg-red-600 hover:bg-red-700 rounded"
+      >
+        Upload
+      </Link>
     </div>
   );
 }

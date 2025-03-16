@@ -185,3 +185,19 @@ export const uploadSoundV1 = mutation({
     });
   },
 });
+
+export const updateSound = mutation({
+  args: {
+    id: v.id("soundsv1"),
+    title: v.optional(v.string()),
+    category: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+  },
+  handler: async (ctx, { id, title, category, tags }) => {
+    return await ctx.db.patch(id, {
+      ...(title !== undefined && { title }),
+      ...(category !== undefined && { category }),
+      ...(tags !== undefined && { tags }),
+    });
+  },
+});
