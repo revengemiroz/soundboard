@@ -41,6 +41,7 @@ const formSchema = z.object({
   url: z
     .string()
     .trim()
+    .max(50, { message: "URL cannot exceed 50 characters." })
     .url({ message: "Please enter a valid URL." })
     .refine((url) => !url.includes(" "), {
       message: "Only one URL is allowed.",
