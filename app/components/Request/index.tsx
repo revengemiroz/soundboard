@@ -28,14 +28,29 @@ import { Input } from "@/components/ui/input";
 import { Link2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+// Improved validation schema
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters." })
+    .max(20, { message: "Name cannot exceed 20 characters." })
+    .regex(/^[a-zA-Z0-9\s]+$/, {
+      message: "Name should only contain letters, numbers, and spaces.",
+    }),
 
-  url: z.string().url({
-    message: "Please enter a valid URL.",
-  }),
+  url: z
+    .string()
+    .trim()
+    .url({ message: "Please enter a valid URL." })
+    .refine((url) => !url.includes(" "), {
+      message: "Only one URL is allowed.",
+    })
+    .refine((url) => !url.includes(","), {
+      message: "Only one URL is allowed.",
+    })
+    .refine((url) => /^(https?:\/\/)/.test(url), {
+      message: "URL must start with http:// or https://",
+    }),
 });
 
 type RequestSoundModalProps = {
@@ -96,7 +111,7 @@ export function RequestSoundModal({
                     <Input placeholder="Oh No No No Laugh" {...field} />
                   </FormControl>
                   <FormDescription>
-                    What's this meme sound commonly called?
+                    Must be between 2 and 50 characters. No special symbols.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -119,8 +134,7 @@ export function RequestSoundModal({
                     </div>
                   </FormControl>
                   <FormDescription>
-                    Link to a YouTube video, TikTok, or other source with the
-                    sound.
+                    Enter only one valid YouTube, TikTok, or direct URL.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
