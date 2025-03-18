@@ -21,10 +21,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "InstantSoundBoard - Largest collection of instant soundboard",
   keywords: [
-    "soundboard, myinstants, sound board, my instant, meme soundboard",
+    "soundboard, myinstants, sound board, my instant, meme soundboard, nepali meme sound, nepal, meme sound, nepali sound, nepali movies sound",
   ],
   description:
-    "Discover and share a vast collection of funny instant sound buttons at MyInstants. Explore popular sounds like VINE BOOM SOUND, Anime Wow, and more. Have fun!",
+    "Discover and share a vast collection of funny instant sound buttons at MyInstants. Explore popular sounds like NEPALI MEME, SOUND BOARD, SOUND, Anime Wow, and more. Have fun!",
 };
 
 export default function RootLayout({
