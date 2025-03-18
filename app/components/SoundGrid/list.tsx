@@ -179,7 +179,7 @@ export default function SoundCard({ sound }: SoundCardProps) {
         <div className="flex items-center gap-4 mt-3">
           {uploadthingURL && (
             <button
-              className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"
+              className="bg-indigo-600 hover:scale-95 active:scale-85 transition-all cursor-pointer hover:bg-indigo-700 text-white p-3 rounded-full flex"
               onClick={handlePlayPause}
             >
               {isPlaying ? <Pause size={20} /> : <Play size={20} />}

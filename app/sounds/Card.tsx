@@ -40,7 +40,7 @@ export default function SoundCard({
       </div>
 
       {/* Sound Title */}
-      <p className="text-base font-semibold capitalize text-gray-800">
+      <p className="text-base  text-center font-semibold capitalize text-gray-800">
         {title}
       </p>
 

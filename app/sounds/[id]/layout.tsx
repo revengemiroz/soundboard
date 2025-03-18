@@ -5,41 +5,46 @@ import { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 
 export function generateSEOMetadata(sound: any): Metadata {
-  // Define the title
+  // Extracting useful keywords from title and tags
+  const keywords = sound?.tags ? sound.tags.join(", ") : "";
+
+  // Define the title with high-ranking keywords
   const title = sound?.title
-    ? `Listen to "${sound.title}" - Free Sound Collection`
-    : "Explore Free Sounds & Audio Clips";
+    ? `${sound.title} | Download & Listen Free Sound Effects`
+    : "Free Sound Effects & Audio Clips for Download";
 
-  // Define the description
-  const description = sound?.category
-    ? `Discover "${sound.title}" in the ${sound.category} category. Find more sounds like this on our platform.`
-    : `Listen to and explore a variety of sounds uploaded by users.`;
+  // Define an engaging description with keywords
+  const description =
+    sound?.title && sound?.category
+      ? `Listen to "${sound.title}" - a top trending sound effect in the ${sound.category} category. Perfect for memes, videos, and creative projects. Get free sound downloads now!`
+      : "Discover and download free sound effects, perfect for meme creators, YouTubers, and video editors.";
 
-  // Fallback image
-  const defaultImage = "/default-thumbnail.jpg"; // Use a real image
+  // Adding a dynamic image (use a real image URL if available)
+  const imageURL = sound?.uploadthingURL || "/default-thumbnail.jpg";
 
   return {
     title,
     description,
+    keywords,
     // openGraph: {
     //   title,
     //   description,
     //   type: "website",
     //   url: `https://yourwebsite.com/sounds/${sound?._id}`,
-    //   images: [
-    //     {
-    //       url: defaultImage, // Use a default image since no image is available in data
-    //       width: 1200,
-    //       height: 630,
-    //       alt: "Sound Thumbnail",
-    //     },
-    //   ],
+    //   // images: [
+    //   //   {
+    //   //     url: imageURL,
+    //   //     width: 1200,
+    //   //     height: 630,
+    //   //     alt: "Sound Thumbnail",
+    //   //   },
+    //   // ],
     // },
     // twitter: {
     //   card: "summary_large_image",
     //   title,
     //   description,
-    //   images: [defaultImage],
+    //   images: [imageURL],
     // },
   };
 }
