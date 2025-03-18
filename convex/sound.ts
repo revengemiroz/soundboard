@@ -3,12 +3,6 @@ import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 // List all sounds
-// export const listSounds = query({
-//   args: {},
-//   handler: async (ctx) => {
-//     return await ctx.db.query("sounds").order("desc").collect();
-//   },
-// });
 export const listSounds = query({
   args: {},
   handler: async (ctx) => {
@@ -23,17 +17,16 @@ export const listSounds = query({
   },
 });
 
-// Get sounds by category
-// export const getSoundsByCategory = query({
-//   args: { category: v.string() },
-//   handler: async (ctx, { category }) => {
-//     return await ctx.db
-//       .query("sounds")
-//       .withIndex("by_category", (q) => q.eq("category", category))
-//       .order("desc")
-//       .collect();
-//   },
-// });
+export const getAllSoundSlugs = query({
+  args: {},
+  handler: async (ctx) => {
+    // Query all sounds but only select the slug field
+    const slugs = await ctx.db.query("soundsv1").collect();
+
+    // Return just an array of slug strings
+    return slugs.map((sound) => sound.slug);
+  },
+});
 
 // Generate an upload URL for Convex Storage
 export const generateUploadUrl = mutation({
@@ -70,20 +63,6 @@ export const getSoundUrl = query({
   },
 });
 
-// Search sounds by title (Case-Insensitive)
-// export const searchSounds = query({
-//   args: { searchTerm: v.string() },
-//   handler: async (ctx, { searchTerm }) => {
-//     const allSounds = await ctx.db.query("sounds").collect();
-//     // console.log({ allSounds }, ctx.storage.getUrl());
-
-//     if (!searchTerm) return allSounds;
-
-//     return allSounds.filter((sound) =>
-//       sound.title.toLowerCase().includes(searchTerm.toLowerCase())
-//     );
-//   },
-// });
 export const searchSounds = query({
   args: {
     searchTerm: v.optional(v.string()),
@@ -134,6 +113,21 @@ export const getSoundById = query({
   },
 });
 
+// New function to get a sound by slug
+export const getSoundBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    const sound = await ctx.db
+      .query("soundsv1")
+      .withIndex("by_slug", (q) => q.eq("slug", slug))
+      .unique();
+
+    if (!sound) return null;
+
+    return { ...sound };
+  },
+});
+
 export const getSoundsByCategory = query({
   args: {
     category: v.string(),
@@ -176,11 +170,30 @@ export const uploadSoundV1 = mutation({
     uploadthingURL: v.string(),
   },
   handler: async (ctx, { title, category, tags, uploadthingURL }) => {
+    // Generate a slug from the title
+    let slug = title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "") // Remove special chars
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .trim();
+
+    // Check if slug already exists
+    const existing = await ctx.db
+      .query("soundsv1")
+      .withIndex("by_slug", (q) => q.eq("slug", slug))
+      .first();
+
+    // If slug exists, append a timestamp to make it unique
+    if (existing) {
+      slug = `${slug}-${Date.now()}`;
+    }
+
     return await ctx.db.insert("soundsv1", {
       title,
       category,
       tags,
       uploadthingURL,
+      slug,
       createdAt: Date.now(),
     });
   },
@@ -192,24 +205,107 @@ export const updateSound = mutation({
     title: v.optional(v.string()),
     category: v.optional(v.string()),
     tags: v.optional(v.array(v.string())),
+    slug: v.optional(v.string()),
   },
-  handler: async (ctx, { id, title, category, tags }) => {
-    return await ctx.db.patch(id, {
-      ...(title !== undefined && { title }),
-      ...(category !== undefined && { category }),
-      ...(tags !== undefined && { tags }),
-    });
+  handler: async (ctx, { id, title, category, tags, slug: providedSlug }) => {
+    // Create an updates object to collect all the changes
+    const updates: Record<string, any> = {};
+
+    // If title is provided, add it to updates
+    if (title !== undefined) {
+      updates.title = title;
+    }
+
+    // If category is provided, add it to updates
+    if (category !== undefined) {
+      updates.category = category;
+    }
+
+    // If tags are provided, add them to updates
+    if (tags !== undefined) {
+      updates.tags = tags;
+    }
+
+    // Handle slug logic
+    if (providedSlug !== undefined) {
+      // If a slug is explicitly provided, check for duplicates
+      const existing = await ctx.db
+        .query("soundsv1")
+        .withIndex("by_slug", (q) => q.eq("slug", providedSlug))
+        .first();
+
+      // If a duplicate exists and it's not the current sound, throw an error
+      if (existing && existing._id.toString() !== id.toString()) {
+        throw new Error(`Slug "${providedSlug}" already exists`);
+      }
+
+      updates.slug = providedSlug;
+    } else if (title !== undefined) {
+      // If title is updated but slug isn't, generate a new slug
+      let newSlug = title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      // Check if the generated slug already exists
+      const existing = await ctx.db
+        .query("soundsv1")
+        .withIndex("by_slug", (q) => q.eq("slug", newSlug))
+        .first();
+
+      // If a duplicate exists and it's not the current sound, make it unique
+      if (existing && existing._id.toString() !== id.toString()) {
+        newSlug = `${newSlug}-${Date.now()}`;
+      }
+
+      // Add the new slug to the update
+      updates.slug = newSlug;
+    }
+
+    // Only apply updates if there are any
+    if (Object.keys(updates).length > 0) {
+      return await ctx.db.patch(id, updates);
+    }
+
+    return await ctx.db.get(id);
   },
 });
 
-export const getAllSoundSlugs = query({
+// Migration function to add slugs to existing sounds
+export const migrateAddSlugsToSounds = mutation({
   args: {},
   handler: async (ctx) => {
-    const sounds = await ctx.db.query("soundsv1").collect();
+    // Get all sounds without slugs
+    const sounds = await ctx.db
+      .query("soundsv1")
+      .filter((q) => q.eq(q.field("slug"), undefined))
+      .collect();
 
-    // Extract only the ID field
-    return sounds.map((sound) => ({
-      id: sound._id,
-    }));
+    // Process each sound
+    for (const sound of sounds) {
+      // Generate a slug from the title
+      let slug = sound.title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      // Check if slug already exists
+      const existing = await ctx.db
+        .query("soundsv1")
+        .withIndex("by_slug", (q) => q.eq("slug", slug))
+        .first();
+
+      // If slug exists, append a timestamp to make it unique
+      if (existing) {
+        slug = `${slug}-${sound._creationTime}`;
+      }
+
+      // Update the sound with the new slug
+      await ctx.db.patch(sound._id, { slug });
+    }
+
+    return { success: true, processed: sounds.length };
   },
 });

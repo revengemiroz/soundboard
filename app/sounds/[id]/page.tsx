@@ -61,9 +61,9 @@ function getRandomElement<T>(array: T[]): T {
 export default function SoundDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
-
-  const sound = useQuery(api.sound.getSoundById, {
-    id: id as string as Id<"soundsv1">,
+  console.log({ id });
+  const sound = useQuery(api.sound.getSoundBySlug, {
+    slug: id as string,
   });
 
   // Random icon and color for each card

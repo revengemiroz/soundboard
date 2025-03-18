@@ -12,11 +12,13 @@ export default defineSchema({
 
   soundsv1: defineTable({
     title: v.string(),
+    slug: v.optional(v.string()),
     category: v.string(),
     uploadthingURL: v.string(),
     tags: v.array(v.string()),
     createdAt: v.number(),
   })
+    .index("by_slug", ["slug"])
     .searchIndex("by_title", { searchField: "title" })
     .index("by_category", ["category", "createdAt"]),
 

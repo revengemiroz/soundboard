@@ -73,6 +73,7 @@ interface SoundCardProps {
     _id: string;
     audioUrl: string;
     category: string;
+    slug: string;
     createdAt: number;
     tags: string[];
     title: string;
@@ -82,8 +83,8 @@ interface SoundCardProps {
 }
 
 export default function SoundCard({ sound }: SoundCardProps) {
-  const { _id, title, category, uploadthingURL } = sound;
-
+  const { _id, title, category, uploadthingURL, slug } = sound;
+  console.log({ slug });
   const router = useRouter();
 
   // Zustand store functions & state
@@ -148,7 +149,7 @@ export default function SoundCard({ sound }: SoundCardProps) {
 
   return (
     <div
-      onClick={() => router.push(`/sounds/${_id}`)}
+      onClick={() => router.push(`/sounds/${slug}`)}
       className="bg-white rounded-xl cursor-pointer shadow-lg p-4 py-8 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all"
     >
       <div className="w-20 h-20 relative">

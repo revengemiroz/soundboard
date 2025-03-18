@@ -27,11 +27,9 @@ async function getRoutes(): Promise<MetadataRoute.Sitemap> {
   async function getSoundSlugs() {
     try {
       const response = await fetchQuery(api.sound.getAllSoundSlugs);
-
+      console.log({ response });
       // Map IDs to generate dynamic sound routes
-      const soundRoutes: string[] = response.map(
-        (sound: { id: string }) => `/sounds/${sound.id}`
-      );
+      const soundRoutes: string[] = response.map((sound) => `/sounds/${sound}`);
       routes = [...routes, ...soundRoutes];
     } catch (error) {
       console.error("Error fetching sound slugs:", error);

@@ -57,8 +57,8 @@ export async function generateMetadata({
   const { id } = params;
 
   // Fetch sound metadata from Convex
-  const sound = await fetchQuery(api.sound.getSoundById, {
-    id: id as string as Id<"soundsv1">,
+  const sound = await fetchQuery(api.sound.getSoundBySlug, {
+    slug: id as string,
   });
   return generateSEOMetadata(sound);
 }
