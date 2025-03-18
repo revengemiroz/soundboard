@@ -61,7 +61,6 @@ function getRandomElement<T>(array: T[]): T {
 export default function SoundDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
-  console.log({ id });
   const sound = useQuery(api.sound.getSoundBySlug, {
     slug: id as string,
   });

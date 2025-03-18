@@ -84,7 +84,6 @@ interface SoundCardProps {
 
 export default function SoundCard({ sound }: SoundCardProps) {
   const { _id, title, category, uploadthingURL, slug } = sound;
-  console.log({ slug });
   const router = useRouter();
 
   // Zustand store functions & state
