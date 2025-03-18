@@ -201,3 +201,15 @@ export const updateSound = mutation({
     });
   },
 });
+
+export const getAllSoundSlugs = query({
+  args: {},
+  handler: async (ctx) => {
+    const sounds = await ctx.db.query("soundsv1").collect();
+
+    // Extract only the ID field
+    return sounds.map((sound) => ({
+      id: sound._id,
+    }));
+  },
+});
