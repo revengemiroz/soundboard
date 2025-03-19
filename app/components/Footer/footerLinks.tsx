@@ -31,7 +31,7 @@ export default function FooterLinks() {
       items: [
         {
           label: "30 Fun Tips to Boost Your Humor",
-          to: "blogs/30-fun-tips-to-boost-your-humor",
+          to: "/blogs/30-fun-tips-to-boost-your-humor",
         },
       ],
     },
