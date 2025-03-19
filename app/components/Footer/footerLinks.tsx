@@ -26,10 +26,19 @@ export default function FooterLinks() {
         { label: "Privacy Policy", to: "/privacy" },
       ],
     },
+    {
+      title: "Blogs",
+      items: [
+        {
+          label: "30 Fun Tips to Boost Your Humor",
+          to: "blogs/30-fun-tips-to-boost-your-humor",
+        },
+      ],
+    },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid grid-cols-3 gap-8">
       {links.map((section) => (
         <div key={section.title}>
           <h3 className="text-lg font-semibold mb-4">{section.title}</h3>
