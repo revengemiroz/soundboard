@@ -4,7 +4,9 @@ import { fetchQuery } from "convex/nextjs";
 import { Id } from "@/convex/_generated/dataModel";
 import { api } from "@/convex/_generated/api";
 
-export function generateSEOMetadata(categoryName: any): Metadata {
+export function generateSEOMetadata(
+  categoryName: string | undefined
+): Metadata {
   // Define the title
   const title = categoryName
     ? `Listen to "${categoryName}" - Free Sound Collection`
@@ -16,19 +18,44 @@ export function generateSEOMetadata(categoryName: any): Metadata {
     : `Listen to and explore a variety of sounds uploaded by users.`;
 
   // Fallback image
-  const defaultImage = "/default-thumbnail.jpg"; // Use a real image
+  const defaultImage = "/default-thumbnail.jpg";
+
+  // Generate dynamic keywords
+  const keywords = categoryName
+    ? [
+        "Nepali Soundboard",
+        "InstantSoundBoard",
+        "Nepali meme sound effects",
+        "viral Nepali meme sounds",
+        "Nepali meme sounds download",
+        "viral Nepali sound effects",
+        "custom sound buttons",
+        categoryName,
+        `${categoryName} soundboard`,
+        `${categoryName} meme sounds`,
+      ]
+    : [
+        "Free soundboard",
+        "InstantSoundBoard",
+        "Nepali sound effects",
+        "meme sounds",
+        "funny audio clips",
+        "custom sound buttons",
+      ];
 
   return {
     title,
     description,
+    keywords,
+    // Uncomment below if you want Open Graph / Twitter metadata
     // openGraph: {
     //   title,
     //   description,
     //   type: "website",
-    //   url: `https://yourwebsite.com/sounds/${sound?._id}`,
+    //   url: `https://yourwebsite.com/sounds/${categoryName}`,
     //   images: [
     //     {
-    //       url: defaultImage, // Use a default image since no image is available in data
+    //       url: defaultImage,
     //       width: 1200,
     //       height: 630,
     //       alt: "Sound Thumbnail",
@@ -51,7 +78,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { categoryName } = params;
 
-  // Fetch sound metadata from Convex
+  // You could fetch data with Convex here if needed
 
   return generateSEOMetadata(categoryName);
 }
