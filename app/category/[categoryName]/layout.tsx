@@ -1,45 +1,46 @@
 import { Metadata } from "next";
+import { convex } from "../../ConvexClientProvider"; // Import Convex client
+import { fetchQuery } from "convex/nextjs";
+import { Id } from "@/convex/_generated/dataModel";
+import { api } from "@/convex/_generated/api";
 
-export function generateSEOMetadata(categoryName?: string): Metadata {
+export function generateSEOMetadata(categoryName: any): Metadata {
   // Define the title
   const title = categoryName
-    ? `Listen to ${categoryName} - Free Sound Collection`
+    ? `Listen to "${categoryName}" - Free Sound Collection`
     : "Explore Free Sounds & Audio Clips";
 
-  // Define a well-written description
+  // Define the description
   const description = categoryName
-    ? `Explore a rich collection of ${categoryName} sounds and audio clips. From viral meme sound effects to classic soundboard buttons, find and download your favorite ${categoryName} audio. Experience the best of ${categoryName} sound culture in one place.`
-    : `Discover a vast collection of sounds and audio clips. From meme sound effects to high-quality soundboard buttons, explore and download a variety of free audio clips.`;
+    ? `Discover "${categoryName}" in the ${categoryName} category. Find more sounds like this on our platform.`
+    : `Listen to and explore a variety of sounds uploaded by users.`;
 
-  // Generate SEO-friendly keywords
-  const keywords = categoryName
-    ? [
-        `${categoryName} soundboard`,
-        `${categoryName} audio clips`,
-        `viral ${categoryName} sounds`,
-        `${categoryName} meme sound effects`,
-        `${categoryName} ringtone downloads`,
-        `soundboard buttons`,
-        `${categoryName} music snippets`,
-        `${categoryName} dialogue clips`,
-        `funny ${categoryName} sounds`,
-        `popular ${categoryName} memes`,
-      ]
-    : [
-        "free soundboard",
-        "audio clips",
-        "meme sound effects",
-        "funny ringtones",
-        "soundboard buttons",
-        "music snippets",
-        "dialogue clips",
-        "popular sound effects",
-      ];
+  // Fallback image
+  const defaultImage = "/default-thumbnail.jpg"; // Use a real image
 
   return {
     title,
     description,
-    keywords,
+    // openGraph: {
+    //   title,
+    //   description,
+    //   type: "website",
+    //   url: `https://yourwebsite.com/sounds/${sound?._id}`,
+    //   images: [
+    //     {
+    //       url: defaultImage, // Use a default image since no image is available in data
+    //       width: 1200,
+    //       height: 630,
+    //       alt: "Sound Thumbnail",
+    //     },
+    //   ],
+    // },
+    // twitter: {
+    //   card: "summary_large_image",
+    //   title,
+    //   description,
+    //   images: [defaultImage],
+    // },
   };
 }
 
@@ -48,5 +49,19 @@ export async function generateMetadata({
 }: {
   params: { categoryName: string };
 }): Promise<Metadata> {
-  return generateSEOMetadata(params.categoryName);
+  const { categoryName } = params;
+
+  // Fetch sound metadata from Convex
+
+  return generateSEOMetadata(categoryName);
+}
+
+export default function SoundPage({
+  children,
+  params,
+}: {
+  children: React.ReactElement;
+  params: { id: string };
+}) {
+  return <>{children}</>;
 }
