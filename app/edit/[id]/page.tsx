@@ -4,11 +4,12 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams, useRouter } from "next/navigation";
 import { useAudioStore } from "@/app/zustand/store";
+import { Id } from "@/convex/_generated/dataModel";
 
 const EditSound = () => {
   const router = useRouter();
   const { id } = useParams();
-  const sound = useQuery(api.sound.getSoundById, { id: id });
+  const sound = useQuery(api.sound.getSoundBySlug, { slug: id as string });
   const updateSound = useMutation(api.sound.updateSound);
 
   const [title, setTitle] = useState("");
@@ -39,7 +40,7 @@ const EditSound = () => {
 
   const handleUpdate = async () => {
     await updateSound({
-      id,
+      id: sound?._id as Id<"soundsv1">,
       title,
       category,
       tags: tags.split(",").map((t) => t.trim()),
