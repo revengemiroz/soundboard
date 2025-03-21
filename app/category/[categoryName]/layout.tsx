@@ -1,73 +1,45 @@
 import { Metadata } from "next";
-import { convex } from "../../ConvexClientProvider"; // Import Convex client
-import { fetchQuery } from "convex/nextjs";
-import { Id } from "@/convex/_generated/dataModel";
-import { api } from "@/convex/_generated/api";
 
-export function generateSEOMetadata(
-  categoryName: string | undefined
-): Metadata {
+export function generateSEOMetadata(categoryName?: string): Metadata {
   // Define the title
   const title = categoryName
-    ? `Listen to "${categoryName}" - Free Sound Collection`
+    ? `Listen to ${categoryName} - Free Sound Collection`
     : "Explore Free Sounds & Audio Clips";
 
-  // Define the description
+  // Define a well-written description
   const description = categoryName
-    ? `Discover "${categoryName}" in the ${categoryName} category. Find more sounds like this on our platform.`
-    : `Listen to and explore a variety of sounds uploaded by users.`;
+    ? `Explore a rich collection of ${categoryName} sounds and audio clips. From viral meme sound effects to classic soundboard buttons, find and download your favorite ${categoryName} audio. Experience the best of ${categoryName} sound culture in one place.`
+    : `Discover a vast collection of sounds and audio clips. From meme sound effects to high-quality soundboard buttons, explore and download a variety of free audio clips.`;
 
-  // Fallback image
-  const defaultImage = "/default-thumbnail.jpg";
-
-  // Generate dynamic keywords
+  // Generate SEO-friendly keywords
   const keywords = categoryName
     ? [
-        "Nepali Soundboard",
-        "InstantSoundBoard",
-        "Nepali meme sound effects",
-        "viral Nepali meme sounds",
-        "Nepali meme sounds download",
-        "viral Nepali sound effects",
-        "custom sound buttons",
-        categoryName,
         `${categoryName} soundboard`,
-        `${categoryName} meme sounds`,
+        `${categoryName} audio clips`,
+        `viral ${categoryName} sounds`,
+        `${categoryName} meme sound effects`,
+        `${categoryName} ringtone downloads`,
+        `soundboard buttons`,
+        `${categoryName} music snippets`,
+        `${categoryName} dialogue clips`,
+        `funny ${categoryName} sounds`,
+        `popular ${categoryName} memes`,
       ]
     : [
-        "Free soundboard",
-        "InstantSoundBoard",
-        "Nepali sound effects",
-        "meme sounds",
-        "funny audio clips",
-        "custom sound buttons",
+        "free soundboard",
+        "audio clips",
+        "meme sound effects",
+        "funny ringtones",
+        "soundboard buttons",
+        "music snippets",
+        "dialogue clips",
+        "popular sound effects",
       ];
 
   return {
     title,
     description,
     keywords,
-    // Uncomment below if you want Open Graph / Twitter metadata
-    // openGraph: {
-    //   title,
-    //   description,
-    //   type: "website",
-    //   url: `https://yourwebsite.com/sounds/${categoryName}`,
-    //   images: [
-    //     {
-    //       url: defaultImage,
-    //       width: 1200,
-    //       height: 630,
-    //       alt: "Sound Thumbnail",
-    //     },
-    //   ],
-    // },
-    // twitter: {
-    //   card: "summary_large_image",
-    //   title,
-    //   description,
-    //   images: [defaultImage],
-    // },
   };
 }
 
@@ -76,19 +48,5 @@ export async function generateMetadata({
 }: {
   params: { categoryName: string };
 }): Promise<Metadata> {
-  const { categoryName } = params;
-
-  // You could fetch data with Convex here if needed
-
-  return generateSEOMetadata(categoryName);
-}
-
-export default function SoundPage({
-  children,
-  params,
-}: {
-  children: React.ReactElement;
-  params: { id: string };
-}) {
-  return <>{children}</>;
+  return generateSEOMetadata(params.categoryName);
 }
