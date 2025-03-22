@@ -47,7 +47,7 @@ export default function CategoriesList() {
     { id: "discord", name: "Discord Soundboard", icon: Radio },
     { id: "viral", name: "Viral Soundboard", icon: Zap },
     { id: "tiktok", name: "TikTok Soundboard", icon: Radio },
-    { id: "nepali", name: "Nepali Soundboard", icon: Mic },
+    { id: "nepali", name: "Nepali Meme Sounds", icon: Mic },
   ];
 
   const filteredCategories = categories.filter((category) =>
