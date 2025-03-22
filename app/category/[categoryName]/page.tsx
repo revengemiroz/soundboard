@@ -6,6 +6,7 @@ import { usePaginatedQuery } from "convex/react";
 import { Scroll, Search } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Faq from "./faq";
 
 function getRandomGradient() {
   const gradients = [
@@ -46,6 +47,31 @@ export default function SoundsByCategoryPage() {
     }
   };
 
+  const h2Test = () => {
+    switch (category) {
+      case "nepali":
+        return "Trending Nepali Meme Sounds for TikTok, Reels, and Memes";
+      case "memes":
+        return "Hilarious meme sound clips to spice up your content";
+      case "anime":
+        return "Epic anime sounds and iconic voice lines for fans";
+      case "movies":
+        return "Famous movie quotes and scenes in audio format";
+      case "music":
+        return "Short music clips, beats, and iconic audio samples";
+      case "sound-effects":
+        return "Useful sound effects for videos, streams, and fun";
+      case "discord":
+        return "Funny and trending Discord soundboard audio clips";
+      case "viral":
+        return "Sounds that went viral on TikTok, Reels, and YouTube";
+      case "tiktok":
+        return "Trending TikTok audio clips for your short videos";
+      default:
+        return `Explore authentic ${category} sound clips for your projects, videos, and creative content`;
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto py-8">
       <div className="text-center mt-12 mb-12">
@@ -61,8 +87,7 @@ export default function SoundsByCategoryPage() {
           Sounds – Authentic Audio Clips
         </h1>
         <h2 className="text-slate-600 px-4 dark:text-slate-400 max-w-2xl mx-auto">
-          Explore authentic {category} sound clips for your projects, videos,
-          and creative content
+          {h2Test()}
         </h2>
       </div>
 
@@ -120,6 +145,8 @@ export default function SoundsByCategoryPage() {
       )}
 
       {status === "LoadingMore" && <div>Loading more sounds...</div>}
+
+      <Faq category={category} />
     </div>
   );
 }
