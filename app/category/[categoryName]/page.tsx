@@ -58,12 +58,12 @@ export default function SoundsByCategoryPage() {
             </span>
             <span className="absolute -bottom-2 left-0 w-full h-3 bg-red-200 dark:bg-red-900/40 rounded-full -z-0 transform -rotate-1"></span>
           </span>{" "}
-          Sounds
+          Sounds – Authentic Audio Clips
         </h1>
-        <p className="text-slate-600 px-4 dark:text-slate-400 max-w-2xl mx-auto">
+        <h2 className="text-slate-600 px-4 dark:text-slate-400 max-w-2xl mx-auto">
           Explore authentic {category} sound clips for your projects, videos,
           and creative content
-        </p>
+        </h2>
       </div>
 
       {/* 🔎 Search Bar */}
