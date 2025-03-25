@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ExternalLink, Download } from "lucide-react";
+import { ExternalLink, Download, Play, PlayCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function MemeSoundEffects() {
   return (
@@ -58,7 +59,7 @@ export default function MemeSoundEffects() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Download className="mr-1 h-3 w-3" />
+                    <PlayCircle className="mr-1 h-3 w-3" />
                     Download {sound.title} for Free
                   </a>
                 </div>
@@ -85,15 +86,15 @@ export default function MemeSoundEffects() {
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4">
                 Want more? Visit{" "}
-                <a
-                  href="https://www.instantsoundboard.com"
+                <Link
+                  href="/"
                   className="text-red-600 inline-flex items-center hover:underline font-medium"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   InstantSoundBoard.com
                   <ExternalLink className="ml-1 h-3 w-3" />
-                </a>{" "}
+                </Link>{" "}
                 to explore hundreds of trending meme sounds, soundboards, and
                 custom buttons. Download, preview, and use them in your videos,
                 streams, or even prank calls.

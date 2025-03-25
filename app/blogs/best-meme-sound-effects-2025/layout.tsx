@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "15 Best Meme Sound Effects of 2025 (Free Downloads) | InstantSoundBoard",
+  title: "15 Best Meme Sound Effects of 2025 | InstantSoundBoard",
   description:
     "Download the most viral meme sound effects of 2025, including Vine Boom, Bruh, John Cena, and more. Get free meme soundboard buttons to level up your content.",
   keywords:
