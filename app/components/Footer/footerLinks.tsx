@@ -33,6 +33,10 @@ export default function FooterLinks() {
           label: "30 Fun Tips to Boost Your Humor",
           to: "/blogs/30-fun-tips-to-boost-your-humor",
         },
+        {
+          label: "Best Meme Sound Effects of 2025",
+          to: "/blogs/best-meme-sound-effects-2025",
+        },
       ],
     },
   ];
