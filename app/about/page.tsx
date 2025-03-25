@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen p-6 bg-gray-100 py-12 rounded-md">
@@ -48,9 +50,9 @@ export default function AboutPage() {
           </p>
           <p className="text-gray-700">
             🌐 Visit:{" "}
-            <a href="https://instantsoundboard.com/" className="text-blue-500">
+            <Link href="/" className="text-blue-500">
               InstantSoundboard.com
-            </a>
+            </Link>
           </p>
         </section>
       </div>
