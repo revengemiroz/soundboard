@@ -316,7 +316,7 @@ function SoundCategory({ title, number, sounds }) {
       </h3>
       <div className="space-y-2 pl-5">
         {sounds.map((sound, index) => (
-          <div key={index} className="flex items-start">
+          <div key={index} className="flex items-center">
             <Link
               href={`${sound.link}`}
               className="text-red-600 inline-flex items-center hover:underline font-medium"

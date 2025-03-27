@@ -12,6 +12,7 @@ import {
   Mic,
   CirclePlus,
   Copy,
+  Loader2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -85,7 +86,13 @@ export default function SoundDetailsPage() {
   } = useAudioStore();
 
   if (!sound)
-    return <p className="min-h-screen text-center py-10">Loading sound...</p>;
+    return (
+      <p className="min-h-screen text-center py-10">
+        <div className="flex justify-center py-48">
+          <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+        </div>
+      </p>
+    );
 
   const isPlaying = currentAudioId === sound._id;
   const isAddedToSoundboard = isInSoundboard(sound._id);
