@@ -18,6 +18,7 @@ interface AudioStore {
   sheetOpen: boolean;
   isLooping: boolean;
   isAdmin: boolean;
+  searchTerm: string;
   playAudio: (id: string, url: string) => void;
   stopAudio: () => void;
   toggleRepeat: (id: string, url: string) => void;
@@ -26,6 +27,8 @@ interface AudioStore {
   isInSoundboard: (_id: string) => boolean;
   setSheetOpen: (open: boolean) => void;
   setIsAdmin: (value: boolean) => void;
+  // homepage search
+  setSearchTerm: (value: string) => void;
 }
 
 export const useAudioStore = create<AudioStore>((set, get) => {
@@ -41,6 +44,7 @@ export const useAudioStore = create<AudioStore>((set, get) => {
     isLooping: false,
     sheetOpen: false,
     isAdmin: storedIsAdmin === "true", // Convert to boolean
+    searchTerm: "",
 
     playAudio: (id: string, url: string) => {
       get().stopAudio(); // Stop any currently playing audio
@@ -131,6 +135,10 @@ export const useAudioStore = create<AudioStore>((set, get) => {
     setIsAdmin: (value: boolean) => {
       localStorage.setItem("isAdmin", String(value)); // Store as string in localStorage
       set({ isAdmin: value });
+    },
+    // home page search
+    setSearchTerm: (value: string) => {
+      set({ searchTerm: value });
     },
   };
 });

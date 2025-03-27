@@ -5,12 +5,14 @@ import { usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import SoundCard from "./list";
 import { Search, Loader2, ArrowDown } from "lucide-react";
+import { useAudioStore } from "@/app/zustand/store";
+import { useRouter } from "next/navigation";
 
 export default function SoundList() {
   const [searchInput, setSearchInput] = useState<string>(""); // Input state
-  const [searchTerm, setSearchTerm] = useState<string>(""); // Query state
+  // const [searchTerm, setSearchTerm] = useState<string>(""); // Query state
   const lastElementRef = useRef<HTMLDivElement | null>(null); // Ref for last element
-
+  const { searchTerm, setSearchTerm } = useAudioStore();
   // Fetch paginated sounds from Convex
   const { results, status, loadMore } = usePaginatedQuery(
     api.sound.searchSounds,
@@ -28,6 +30,10 @@ export default function SoundList() {
     },
     [searchInput]
   );
+
+  useEffect(() => {
+    setSearchInput(searchTerm.trim());
+  }, [searchTerm]);
 
   // Smooth Scroll After Loading More
   useEffect(() => {
