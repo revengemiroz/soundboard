@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ExternalLink, Download, Volume2 } from "lucide-react";
+import Link from "next/link";
 
 export default function MemeSoundEffectsForVideoEditing() {
   return (
@@ -48,26 +49,35 @@ export default function MemeSoundEffectsForVideoEditing() {
                 title="Classic Meme Sounds"
                 number="1️⃣"
                 sounds={[
-                  { name: "Oof", description: "Classic Roblox sound effect" },
+                  {
+                    name: "Oof",
+                    description: "Classic Roblox sound effect",
+                    link: "https://www.instantsoundboard.com/sounds/roblox-oof-meme-sound",
+                  },
                   {
                     name: "Windows Error",
                     description: "The sound of frustration!",
+                    link: "https://www.instantsoundboard.com/sounds/windows-xp-error-sound",
                   },
                   {
                     name: "Microsoft Windows Startup",
                     description: "A nostalgic throwback",
+                    link: "https://www.instantsoundboard.com/sounds/microsoft-windows-startup-sound",
                   },
                   {
                     name: "Dial-Up Internet",
                     description: "Remember the pain of slow internet?",
+                    link: "https://www.instantsoundboard.com/sounds/dial-up-internet-sound",
                   },
                   {
                     name: "GTA Wasted",
                     description: "Perfect for fails and game edits",
+                    link: "https://www.instantsoundboard.com/sounds/gta-v-wasted-sound",
                   },
                   {
                     name: "Distorted Windows Startup",
                     description: "For that glitchy, cursed effect",
+                    link: "https://www.instantsoundboard.com/sounds/distorted-windows-startup-meme-sound",
                   },
                 ]}
               />
@@ -76,34 +86,45 @@ export default function MemeSoundEffectsForVideoEditing() {
                 title="Funny & Viral Sound Clips"
                 number="2️⃣"
                 sounds={[
-                  { name: "Legitness", description: '"That was legitness!"' },
+                  {
+                    name: "Legitness",
+                    description: '"That was legitness!"',
+                    link: "https://www.instantsoundboard.com/sounds/that-was-legitness-meme-sound",
+                  },
                   {
                     name: "Okay",
                     description: "Short and effective for reactions",
+                    link: "https://www.instantsoundboard.com/sounds/okay-meme-sound",
                   },
                   {
                     name: "Oh My God",
                     description: "Great for dramatic moments",
+                    link: "https://www.instantsoundboard.com/sounds/oh-my-god-meme-sound",
                   },
                   {
                     name: "Sheesh",
                     description: "When something is just too cool",
+                    link: "https://www.instantsoundboard.com/sounds/sheesh-meme-sound",
                   },
                   {
                     name: "Taco Bell Bong",
                     description: "The famous deep bell sound",
+                    link: "https://www.instantsoundboard.com/sounds/taco-bell-bong-sound-effect",
                   },
                   {
                     name: "Dinosaur Man Scream",
                     description: "An exaggerated and hilarious scream",
+                    link: "https://www.instantsoundboard.com/sounds/dinosaur-man-scream-sound-effect",
                   },
                   {
                     name: "His Name is Jeff",
                     description: "Classic meme reference",
+                    link: "https://www.instantsoundboard.com/sounds/my-name-is-jeff-meme-sound",
                   },
                   {
                     name: "No God Please No!",
                     description: "Michael Scott's legendary scream",
+                    link: "https://www.instantsoundboard.com/sounds/my-name-is-jeff-meme-sound",
                   },
                 ]}
               />
@@ -115,37 +136,53 @@ export default function MemeSoundEffectsForVideoEditing() {
                   {
                     name: "Mario Jump",
                     description: "From the beloved plumber himself",
+                    link: "https://www.instantsoundboard.com/sounds/mario-jump-sound-effect",
                   },
                   {
                     name: "FBI Open Up!",
                     description: "For dramatic entrances",
+                    link: "https://www.instantsoundboard.com/sounds/fbi-open-up-meme-sound",
                   },
                   {
                     name: "Dramatic Fart",
                     description: "Because farts are always funny",
+                    link: "https://www.instantsoundboard.com/sounds/dramatic-fart-meme-sound",
                   },
                   {
                     name: "We'll Be Right Back",
                     description: "Perfect for unexpected cuts",
+                    link: "https://www.instantsoundboard.com/sounds/well-be-right-back-meme-sound",
                   },
                   {
                     name: "Wilhelm Scream",
                     description: "A Hollywood classic scream",
+                    link: "https://www.instantsoundboard.com/sounds/wilhelm-scream-meme-sound",
                   },
-                  { name: "Toasty", description: "From Mortal Kombat!" },
+                  {
+                    name: "Toasty",
+                    description: "From Mortal Kombat!",
+                    link: "https://www.instantsoundboard.com/sounds/mortal-combat-toasty-sound-effect",
+                  },
                   {
                     name: "Fatality",
                     description: "For intense gaming moments",
+                    link: "https://www.instantsoundboard.com/sounds/fatality-mortal-kombat-sound-effect",
                   },
                   {
                     name: "Sniper Shot",
                     description: "For those precise moments",
+                    link: "https://www.instantsoundboard.com/sounds/sniper-shot-sound-effect",
                   },
                   {
                     name: "Mission Failed",
                     description: "We'll get 'em next time!",
+                    link: "https://www.instantsoundboard.com/sounds/mission-failed-well-get-em-next-time-sound-effect",
                   },
-                  { name: "Explosion", description: "For ultimate impact" },
+                  {
+                    name: "Explosion",
+                    description: "For ultimate impact",
+                    link: "https://www.instantsoundboard.com/sounds/explosion-meme-sound-effect",
+                  },
                 ]}
               />
 
@@ -153,32 +190,50 @@ export default function MemeSoundEffectsForVideoEditing() {
                 title="Comedy & Reaction Sounds"
                 number="4️⃣"
                 sounds={[
-                  { name: "Bruh", description: "The ultimate meme reaction" },
+                  {
+                    name: "Bruh",
+                    description: "The ultimate meme reaction",
+                    link: "https://www.instantsoundboard.com/sounds/bruh-sound-effect",
+                  },
                   {
                     name: "Goat Scream",
                     description: "Hilarious and unexpected",
+                    link: "https://www.instantsoundboard.com/sounds/goat-scream-meme-sound-effect",
                   },
                   {
                     name: "Anime Woah/Woww",
                     description: "For exaggerated reactions",
+                    link: "https://www.instantsoundboard.com/sounds/anime-wow-meme-sound",
                   },
-                  { name: "Look at This Dude", description: "No No No No 😂" },
+                  {
+                    name: "Look at This Dude",
+                    description: "No No No No 😂",
+                    link: "https://www.instantsoundboard.com/sounds/look-at-this-dude-meme-sound",
+                  },
                   {
                     name: "Skibidi Bop MM DADA",
                     description: "Instantly recognizable tune",
+                    link: "https://www.instantsoundboard.com/sounds/skibidi-bop-mm-dada-meme-sound-effect",
                   },
                   {
                     name: "Why Are You Running?",
                     description: "For dramatic chases",
+                    link: "https://www.instantsoundboard.com/sounds/why-are-you-running-meme-sound",
                   },
                   {
                     name: "Hey, That's Pretty Good",
                     description: "A classic approval sound",
+                    link: "https://www.instantsoundboard.com/sounds/hey-thats-pretty-good",
                   },
-                  { name: "Noice", description: "A solid meme approval" },
+                  {
+                    name: "Noice",
+                    description: "A solid meme approval",
+                    link: "https://www.instantsoundboard.com/sounds/noice-meme-sound",
+                  },
                   {
                     name: "Say Whatttttt",
                     description: "For shocking moments",
+                    link: "https://www.instantsoundboard.com/sounds/say-what-meme-sound",
                   },
                 ]}
               />
@@ -262,13 +317,13 @@ function SoundCategory({ title, number, sounds }) {
       <div className="space-y-2 pl-5">
         {sounds.map((sound, index) => (
           <div key={index} className="flex items-start">
-            <a
-              href={`#${sound.name.toLowerCase().replace(/\s+/g, "-")}`}
+            <Link
+              href={`/${sound.link}`}
               className="text-red-600 inline-flex items-center hover:underline font-medium"
             >
               <Volume2 className="mr-2 h-3 w-3 flex-shrink-0 mt-1" />
               <span className="text-gray-800">{sound.name}</span>
-            </a>
+            </Link>
             {sound.description && (
               <span className="text-gray-500 text-sm ml-2">
                 ({sound.description})
