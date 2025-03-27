@@ -251,15 +251,15 @@ export default function MemeSoundEffectsForVideoEditing() {
                 like:
               </p>
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
-                <a
-                  href="https://www.instantsoundboard.com"
+                <Link
+                  href="/"
                   className="text-red-600 inline-flex items-center hover:underline font-medium"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   InstantSoundBoard.com
                   <ExternalLink className="ml-1 h-3 w-3" />
-                </a>
+                </Link>
                 <p className="text-gray-600 text-sm mt-1">
                   Your go-to website for meme sounds, meme soundboard, and sound
                   buttons!
