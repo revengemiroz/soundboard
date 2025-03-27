@@ -37,6 +37,10 @@ export default function FooterLinks() {
           label: "Best Meme Sound Effects of 2025",
           to: "/blogs/best-meme-sound-effects-2025",
         },
+        {
+          label: "Top Meme Sounds & Soundboard Buttons for Video Editing",
+          to: "/blogs/download-meme-sound-effects-for-video-editing",
+        },
       ],
     },
   ];
