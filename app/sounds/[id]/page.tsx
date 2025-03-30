@@ -13,6 +13,7 @@ import {
   CirclePlus,
   Copy,
   Loader2,
+  PlayIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -31,6 +32,7 @@ import {
   Star,
   Zap,
 } from "lucide-react";
+import RecommendedSounds from "@/app/components/Recommended";
 
 const iconComponents = {
   Music,
@@ -181,6 +183,18 @@ export default function SoundDetailsPage() {
 
         {/* Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mx-auto mt-6 w-full ">
+          <button
+            onClick={handlePlayPause}
+            className={`flex items-center w-full sm:col-span-2 cursor-pointer justify-center gap-2 px-4 py-3 rounded-md transition-all ${
+              isPlaying
+                ? "bg-gray-400 hover:bg-gray-500 text-white"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+            }`}
+          >
+            <PlayIcon className="h-5 w-5" />
+            {isPlaying ? "Pause Sound" : "Play Sound"}
+          </button>
+
           {/* Copy Link Button */}
           <button
             onClick={handleShare}
@@ -219,6 +233,12 @@ export default function SoundDetailsPage() {
           </button>
         </div>
       </div>
+
+      {sound._id && (
+        <div>
+          <RecommendedSounds soundId={sound._id} />
+        </div>
+      )}
     </div>
   );
 }

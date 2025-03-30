@@ -309,3 +309,36 @@ export const migrateAddSlugsToSounds = mutation({
     return { success: true, processed: sounds.length };
   },
 });
+
+export const getRecommendedSounds = query({
+  args: {
+    soundId: v.id("soundsv1"),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, { soundId, limit = 6 }) => {
+    const targetSound = await ctx.db.get(soundId);
+    if (!targetSound) return [];
+
+    // Step 1: Find other sounds in the same category (excluding the target sound)
+    const sameCategory = await ctx.db
+      .query("soundsv1")
+      .withIndex("by_category", (q) => q.eq("category", targetSound.category))
+      .order("desc")
+      .take(20); // Get more than needed to filter later
+
+    const filtered = sameCategory.filter((s) => s._id !== soundId);
+
+    // Step 2: Sort by overlapping tags
+    const sortedByTags = filtered
+      .map((sound) => {
+        const commonTags = sound.tags.filter((tag) =>
+          targetSound.tags.includes(tag)
+        );
+        return { ...sound, tagScore: commonTags.length };
+      })
+      .sort((a, b) => b.tagScore - a.tagScore)
+      .slice(0, limit);
+
+    return sortedByTags;
+  },
+});
