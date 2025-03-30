@@ -46,6 +46,10 @@ export default function FooterLinks() {
           label: "Studio Ghibli Meme Sounds & Pictures: The Perfect Combo",
           to: "/blogs/studio-ghibli-meme-sounds-pictures",
         },
+        {
+          label: "How to Use a Discord Soundboard Like a Pro in 2025",
+          to: "/blogs/how-to-use-discord-soundboard",
+        },
       ],
     },
   ];
