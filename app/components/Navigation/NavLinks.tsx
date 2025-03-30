@@ -134,7 +134,7 @@ export default function NavLinks() {
         </DropdownMenuContent>
       </DropdownMenu>
       {/* <NavLink to="/create">CREATE</NavLink> */}
-      <NavLink to="/about">ABOUT</NavLink>
+      {/* <NavLink to="/about">ABOUT</NavLink> */}
 
       <button
         onClick={() => setOpen(true)}

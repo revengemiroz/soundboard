@@ -24,6 +24,7 @@ export default function FooterLinks() {
         { label: "Contact Us", to: "/contact" },
         { label: "Terms of Use", to: "/terms" },
         { label: "Privacy Policy", to: "/privacy" },
+        { label: "About Us", to: "/about" },
       ],
     },
     {
@@ -50,7 +51,7 @@ export default function FooterLinks() {
   ];
 
   return (
-    <div className="grid grid-cols-3 gap-8">
+    <div className="grid grid-cols-[1fr_0.5fr_1.5fr] gap-4">
       {links.map((section) => (
         <div key={section.title}>
           <h3 className="text-lg font-semibold mb-4">{section.title}</h3>
