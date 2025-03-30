@@ -14,6 +14,7 @@ import {
   Copy,
   Loader2,
   PlayIcon,
+  PauseIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -191,7 +192,11 @@ export default function SoundDetailsPage() {
                 : "bg-indigo-600 hover:bg-indigo-700 text-white"
             }`}
           >
-            <PlayIcon className="h-5 w-5" />
+            {isPlaying ? (
+              <PauseIcon className="h-5 w-5" />
+            ) : (
+              <PlayIcon className="h-5 w-5" />
+            )}
             {isPlaying ? "Pause Sound" : "Play Sound"}
           </button>
 
