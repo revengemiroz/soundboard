@@ -41,6 +41,10 @@ export default function FooterLinks() {
           label: "Top Meme Sounds & Soundboard Buttons for Video Editing",
           to: "/blogs/download-meme-sound-effects-for-video-editing",
         },
+        {
+          label: "Studio Ghibli Meme Sounds & Pictures: The Perfect Combo",
+          to: "/blogs/studio-ghibli-meme-sounds-pictures",
+        },
       ],
     },
   ];
