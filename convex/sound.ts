@@ -328,8 +328,10 @@ export const getRecommendedSounds = query({
 
     const filtered = sameCategory.filter((s) => s._id !== soundId);
 
+    const shuffled = filtered.sort(() => Math.random() - 0.5);
+
     // Step 2: Sort by overlapping tags
-    const sortedByTags = filtered
+    const sortedByTags = shuffled
       .map((sound) => {
         const commonTags = sound.tags.filter((tag) =>
           targetSound.tags.includes(tag)
