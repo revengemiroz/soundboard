@@ -64,6 +64,7 @@ function getRandomElement<T>(array: T[]): T {
 
 export default function SoundDetailsPage() {
   const { id } = useParams();
+
   const router = useRouter();
   const sound = useQuery(api.sound.getSoundBySlug, {
     slug: id as string,
@@ -88,7 +89,7 @@ export default function SoundDetailsPage() {
     isLooping,
   } = useAudioStore();
 
-  if (!sound)
+  if (!sound || !id)
     return (
       <p className="min-h-screen text-center py-10">
         <div className="flex justify-center py-48">
@@ -237,6 +238,54 @@ export default function SoundDetailsPage() {
               : "Add to Soundboard"}
           </button>
         </div>
+      </div>
+
+      {/* Minimalist SEO content */}
+      <div className="py-10 w-full mt-16 text-sm  leading-relaxed space-y-4 px-12 bg-white rounded-md border mx-auto">
+        <h2 className="text-lg  text-indigo-500 font-bold">
+          About "{sound.title}"
+        </h2>
+
+        <p className="text-muted-foreground/95 font-semibold">
+          <span className="text-indigo-500 font-bold capitalize">
+            {sound.title}
+          </span>{" "}
+          is a popular sound from the{" "}
+          <strong className="text-indigo-500 font-bold">
+            {sound.category}
+          </strong>{" "}
+          category. Use it to add humor or context to memes, videos, or reels.
+        </p>
+
+        <ul className="list-disc pl-5 space-y-1 text-muted-foreground/95 font-semibold">
+          <li>✅ Instant playback and download</li>
+          <li>🎧 Great for TikToks, Shorts, and Reels</li>
+          <li>📤 Shareable on any social platform</li>
+          <li>🔊 Free MP3 available for use</li>
+        </ul>
+
+        <p className="text-muted-foreground/95 font-semibold">
+          You can{" "}
+          <Link
+            href={"#"}
+            className="text-indigo-600 underline font-medium"
+            download
+          >
+            download "{sound.title}"
+          </Link>{" "}
+          as an MP3 or copy the link to share it with others.
+        </p>
+
+        <p className="text-muted-foreground/95 font-semibold">
+          Looking for more? Explore other sounds in the{" "}
+          <Link
+            href={`/category/${sound.category}`}
+            className="text-indigo-600 capitalize font-medium underline"
+          >
+            {sound.category}
+          </Link>{" "}
+          category.
+        </p>
       </div>
 
       {sound._id && (
