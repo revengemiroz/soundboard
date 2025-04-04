@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { usePaginatedQuery } from "convex/react";
+import { useMutation, usePaginatedQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import SoundCard from "./list";
 import { Search, Loader2, ArrowDown } from "lucide-react";
@@ -9,6 +9,8 @@ import { useAudioStore } from "@/app/zustand/store";
 import { useRouter } from "next/navigation";
 
 export default function SoundList() {
+  const logMissedSearch = useMutation(api.missedSearch.logMissedSearch);
+
   const [searchInput, setSearchInput] = useState<string>(""); // Input state
   // const [searchTerm, setSearchTerm] = useState<string>(""); // Query state
   const lastElementRef = useRef<HTMLDivElement | null>(null); // Ref for last element
@@ -25,10 +27,14 @@ export default function SoundList() {
 
   // Handle Enter Key Press for Search
   const handleSearch = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") setSearchTerm(searchInput.trim());
+    async (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        const trimmedInput = searchInput.trim();
+        setSearchTerm(trimmedInput);
+        await logMissedSearch({ query: trimmedInput });
+      }
     },
-    [searchInput]
+    [searchInput, logMissedSearch]
   );
 
   useEffect(() => {
@@ -61,7 +67,9 @@ export default function SoundList() {
           type="text"
           placeholder="Search for sounds..."
           value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+          }}
           onKeyDown={handleSearch}
           className="w-full pl-10 bg-white pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
         />

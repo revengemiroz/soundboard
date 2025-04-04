@@ -27,4 +27,10 @@ export default defineSchema({
     url: v.string(),
     createdAt: v.number(),
   }).index("by_createdAt", ["createdAt"]),
+
+  // find missed searches
+  missedSearches: defineTable({
+    query: v.string(),
+    createdAt: v.number(),
+  }).index("by_createdAt", ["createdAt"]),
 });
