@@ -7,18 +7,7 @@ export const logMissedSearch = mutation({
     query: v.string(),
   },
   handler: async (ctx, args) => {
-    const existing = await ctx.db
-      .query("missedSearches")
-      .withIndex("by_createdAt")
-      .collect();
-
-    const recentDuplicate = existing.find(
-      (entry) =>
-        entry.query.toLowerCase() === args.query.toLowerCase() &&
-        Date.now() - entry.createdAt < 1000 * 60 * 60 * 24 // 24 hours
-    );
-
-    if (recentDuplicate) return;
+    if (args.query.length == 0) return;
 
     await ctx.db.insert("missedSearches", {
       query: args.query,
