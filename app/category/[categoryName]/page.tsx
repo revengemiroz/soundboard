@@ -2,7 +2,7 @@
 
 import SoundCard from "@/app/components/SoundGrid/list";
 import { api } from "@/convex/_generated/api";
-import { usePaginatedQuery } from "convex/react";
+import { useMutation, usePaginatedQuery } from "convex/react";
 import { Scroll, Search } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,6 +22,8 @@ function getRandomGradient() {
 }
 
 export default function SoundsByCategoryPage() {
+  const logMissedSearch = useMutation(api.missedSearch.logMissedSearch);
+
   const params = useParams();
   const category = params?.categoryName ?? ""; // Replace with dynamic category if needed
   const [searchInput, setSearchInput] = useState(""); // Stores user input
@@ -41,9 +43,10 @@ export default function SoundsByCategoryPage() {
   );
 
   // ✅ Trigger search when user presses Enter
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       setSearchTerm(searchInput); // ✅ Update search query
+      await logMissedSearch({ query: searchInput.trim() });
     }
   };
 
