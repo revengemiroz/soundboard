@@ -243,8 +243,8 @@ export default function SoundDetailsPage() {
       </div>
 
       {/* Minimalist SEO content */}
-      <div className="py-10 w-full mt-16 text-sm  leading-relaxed space-y-4 px-12 bg-white rounded-md border mx-auto">
-        <h2 className="text-lg  text-indigo-500 font-bold">
+      <div className="py-10 w-full mt-16 text-sm leading-relaxed space-y-4 px-12 bg-white rounded-md border mx-auto">
+        <h2 className="text-lg text-indigo-500 font-bold">
           About "{sound.title}"
         </h2>
 
@@ -288,6 +288,39 @@ export default function SoundDetailsPage() {
           </Link>{" "}
           category.
         </p>
+
+        {/* 👇 Technologia Highlight Section */}
+        {sound.title.toLowerCase() !== "technologia" && (
+          <div className="pt-6 border-t mt-6">
+            <h3 className="text-base font-bold text-indigo-500 mb-2">
+              🎧 See More Sounds Like "Technologia"
+            </h3>
+            <p className="text-muted-foreground/95 font-semibold">
+              "Technologia" is one of our most popular sounds! Check it out for
+              futuristic vibes and high energy content.
+            </p>
+            <div className="flex flex-col gap-1">
+              <Link
+                href="/sounds/technologia-meme-sound"
+                className="inline-block mt-2 text-indigo-600 underline font-medium"
+              >
+                Listen to "Technologia"
+              </Link>
+              <Link
+                href="/sounds/bombardino-crocodilo-meme-sound"
+                className="inline-block mt-2 text-indigo-600 underline font-medium"
+              >
+                Listen to "Bombardino Crocodilo"
+              </Link>
+              <Link
+                href="/sounds/bombardino-crocodilo-funk-sound"
+                className="inline-block mt-2 text-indigo-600 underline font-medium"
+              >
+                Listen to "Bombardino Crocodilo Funk version"
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
 
       {sound._id && (
