@@ -162,7 +162,9 @@ export default function SoundDetailsPage() {
       </button>
 
       <div className="bg-white shadow-lg rounded-lg p-6 border">
-        <h1 className="text-2xl font-bold capitalize">{sound.title}</h1>
+        <h1 className="text-2xl font-bold capitalize">
+          {sound.title} - Meme Sound Effect Button for Soundboard
+        </h1>
         <p className="text-gray-500 flex text-sm items-center gap-2 mb-6 capitalize">
           <Mic size={14} className="mt-1" />
           {sound.category} • {new Date(sound.createdAt).toLocaleDateString()}
