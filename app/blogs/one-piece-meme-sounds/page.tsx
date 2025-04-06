@@ -12,10 +12,10 @@ export default function OnePieceMemeSounds() {
       <div className="max-w-3xl mx-auto">
         <Card className="border-none shadow-sm overflow-hidden">
           <CardContent className="p-8 sm:p-10">
-            <div className="relative w-full h-[400px] mb-6 rounded-lg overflow-hidden">
+            <div className="relative w-full h-[900px] mb-6 rounded-lg overflow-hidden">
               <Image
-                src="https://gqr9hsnw3t.ufs.sh/f/XJkzOpJKkUZR3rI1FeL8YzReAo9C3mn6zC8HyZqzUfRLOdHG"
-                alt="One Piece soundboard characters"
+                src="https://gqr9hsnw3t.ufs.sh/f/YviIkKSgzk0bcoLLdBM8i1KmqJUXgn7zC6NLvtdjHbVx2DTM"
+                alt="One Piece meme characters"
                 fill
                 className="object-cover"
                 priority
@@ -25,7 +25,7 @@ export default function OnePieceMemeSounds() {
             <h1 className="text-3xl font-bold text-gray-900 mb-6 tracking-tight">
               One Piece Meme Sounds & Audio Clips
               <span className="text-red-600 block text-xl mt-1">
-                Hype Moments Ahead of Episode 1123
+                Hype Moments Ahead of Episode 1124
               </span>
             </h1>
 
@@ -34,7 +34,7 @@ export default function OnePieceMemeSounds() {
               engine of pure gold. With over 1100 episodes of legendary scenes,
               unforgettable characters, and meme-worthy moments, the Straw Hat
               crew has cemented their place in internet culture. But as Episode
-              1123 approaches, fans are bracing for another wave of iconic lines
+              1124 approaches, fans are bracing for another wave of iconic lines
               and sounds that are sure to go viral. This article is your
               ultimate guide to the best *One Piece* meme sounds and how you can
               use them to create TikToks, Discord alerts, reaction edits, and
@@ -67,29 +67,24 @@ export default function OnePieceMemeSounds() {
               number="🎙️"
               sounds={[
                 {
-                  name: "Luffy’s Laugh (Shishishi)",
+                  name: "One Piece drums of liberation",
                   description: "Pure joy, perfect for meme cuts",
-                  link: "/sounds/one-piece-luffy-laugh",
+                  link: "/sounds/one-piece-drums-of-liberation",
                 },
                 {
-                  name: "Zoro Confused Yell",
+                  name: "One Piece brook panties meme sound",
                   description: "Lost again. Classic.",
-                  link: "/sounds/one-piece-zoro-lost",
+                  link: "/sounds/one-piece-brook-panties-meme-sound",
                 },
                 {
-                  name: "Sanji Nosebleed SFX",
+                  name: "one piece Brook Yooo Hoo Yooo HOOO meme sound",
                   description: "Simps unite!",
-                  link: "/sounds/one-piece-sanji-nosebleed",
+                  link: "/sounds/one-piece-brook-yooo-hoo-yooo-hooo-meme-sound",
                 },
                 {
-                  name: "Brook’s Yohohoho Laugh",
+                  name: "Luffy Mina Mina Shimawa",
                   description: "Skull humor at its finest",
-                  link: "/sounds/one-piece-brook-yoho",
-                },
-                {
-                  name: "Buggy’s Maniacal Laugh",
-                  description: "For dramatic chaos moments",
-                  link: "/sounds/one-piece-buggy-laugh",
+                  link: "/sounds/luffy-mina-mina-shimawa",
                 },
               ]}
             />
@@ -110,7 +105,7 @@ export default function OnePieceMemeSounds() {
             <p className="text-gray-600 mb-6">
               That’s what makes them perfect for reaction edits, green screen
               skits, and Discord meme bots. And now that we’re just days away
-              from Episode 1123, the community is already waiting to clip the
+              from Episode 1124, the community is already waiting to clip the
               next viral sound.
             </p>
 
@@ -197,10 +192,10 @@ export default function OnePieceMemeSounds() {
             <Separator className="my-10 bg-red-600/20" />
 
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              🔥 What’s Coming in Episode 1123?
+              🔥 What’s Coming in Episode 1124?
             </h2>
             <p className="text-gray-600 mb-4">
-              While we won’t spoil anything, Episode 1123 is already being
+              While we won’t spoil anything, Episode 1124 is already being
               teased as one of the most emotional drops in the current arc. And
               with that comes high-pitched yells, power-up roars, heartfelt
               declarations, and likely a meme-worthy scream or two.
