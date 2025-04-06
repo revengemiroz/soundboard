@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "Studio Ghibli meme sounds, Ghibli soundboard, Ghibli audio clips, Anime meme sound effects, Totoro roar, Calcifer meme, No-Face ah sound, Ghibli meme images, Meme soundboard, Studio Ghibli TikTok, Funny anime sounds, Instant SoundBoard",
   alternates: {
     canonical:
-      "https://www.instantsoundboard.com/blogs/studio-ghibli-meme-sounds",
+      "https://www.instantsoundboard.com/blogs/studio-ghibli-meme-sounds-pictures",
   },
 };
 

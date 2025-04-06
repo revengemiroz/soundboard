@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "how to use a soundboard, Discord soundboard, soundboard for Discord, Discord meme sounds, soundboard guide 2025, voicy alternatives, soundpad sounds, sonidos para Discord, prank sounds, TikTok audio memes, custom soundboards, gaming soundboard, InstantSoundBoard",
   alternates: {
     canonical:
-      "https://www.instantsoundboard.com/blogs/how-to-use-a-soundboard",
+      "https://www.instantsoundboard.com/blogs/how-to-use-discord-soundboard",
   },
 };
 
