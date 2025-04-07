@@ -19,12 +19,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Instant Soundboard - Free Funny Sound Buttons & Meme Effects",
+  title: "Instant Soundboard - Free meme soundboard and sound effects",
   keywords: [
-    "instant sound buttons, funny sound buttons, free sound effects, download sound buttons, custom soundboard online, meme soundboard,soundboard, myinstants, sound board, my instant, meme soundboard, nepali meme sound, nepal, meme sound, nepali sound, nepali movies sound",
+    "instant sound buttons, funny sound buttons, free sound effects, download sound buttons, meme soundboard online, meme soundboard,soundboard, myinstants, sound board, my instant, nepali meme sound, meme sound, nepali sound, nepali movies sound",
   ],
   description:
-    "Discover 400+ instant sound buttons – memes, gaming, anime & viral sounds. Create your own soundboard and share your favorites. Explore popular sounds like NEPALI meme sound, Anime sounds, and more. Have fun!",
+    "Discover free instant meme sound buttons, anime sounds and minecraft sounds. Create your own meme soundboard and share sounds. Explore popular sounds like Technologia meme sound, Minecraft, i am steve meme sound, Anime sounds",
 };
 
 export default function RootLayout({
