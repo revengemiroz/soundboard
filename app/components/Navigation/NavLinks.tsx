@@ -131,6 +131,12 @@ export default function NavLinks() {
           >
             Nepali Soundboard
           </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => router.push("/category/indian")}
+            className="cursor-pointer"
+          >
+            Indian Soundboard
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {/* <NavLink to="/create">CREATE</NavLink> */}

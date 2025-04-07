@@ -129,6 +129,7 @@ export default function UploadPage() {
               "Discord",
               "Tiktok",
               "Nepali",
+              "Indian",
             ]}
             required
           />

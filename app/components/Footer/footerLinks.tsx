@@ -15,6 +15,7 @@ export default function FooterLinks() {
         { label: "Categories Viral Soundboard", to: "/category/viral" },
         { label: "Categories Tiktok Soundboard", to: "/category/tiktok" },
         { label: "Categories Nepali Soundboard", to: "/category/nepali" },
+        { label: "Categories Indian Soundboard", to: "/category/indian" },
       ],
     },
     {
