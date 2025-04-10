@@ -21,20 +21,24 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Instant Soundboard - Free meme soundboard and sound effects",
   keywords: [
+    "sound buttons",
+    "soundboard",
+    "memes sounds",
+    "free sounds",
+    "memes",
+    "instant sound buttons",
+    "sound buttons effect",
+    "sound board",
     "instant soundboard",
     "meme soundboard",
-    "funny sound buttons",
-    "free sound effects",
-    "download sound buttons",
-    "anime sounds",
-    "minecraft soundboard",
-    "nepali meme sound",
-    "myinstants alternative",
-    "meme sounds online",
-    "nepali meme sounds online",
+    "discord soundboard",
+    "meme board sounds",
+    "sound effects button",
+    "viral sounds",
+    "funny sounds",
   ],
   description:
-    "Discover free instant meme sound buttons, anime sounds and minecraft sounds. Create your own meme soundboard and share sounds. Explore popular sounds like Technologia meme sound, Minecraft, i am steve meme sound, Anime sounds",
+    "Explore the ultimate collection of meme sounds buttons, funny sound effects, and viral audio clips. Play, share, or create your own soundboard instantly. Download for free",
 };
 
 export default function RootLayout({
