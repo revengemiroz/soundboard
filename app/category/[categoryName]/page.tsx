@@ -55,7 +55,7 @@ export default function SoundsByCategoryPage() {
       case "nepali":
         return "Trending Nepali Meme Sounds for TikTok, Reels, and Memes";
       case "memes":
-        return "Our Meme Soundboard contains all the funniest meme sounds and audio clips. Have any meme sounds you like, you will find a meme sound button right here.";
+        return "Search and Discover the best meme sounds at InstantSoundboard. Download best meme sound effects buttons for you meme soundboard, Find best meme sounds at InstantSoundboard. Enjoy our large collection of funny sound effects. Play, Download and share with your friends and spread the laughter";
       case "anime":
         return "Epic anime sounds and iconic voice lines for fans";
       case "movies":

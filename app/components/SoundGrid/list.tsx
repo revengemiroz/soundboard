@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SheetComponent from "../SheetComponent";
+import Link from "next/link";
 
 const iconComponents = {
   Music,
@@ -111,11 +112,13 @@ export default function SoundCard({ sound }: SoundCardProps) {
 
   const handlePlayPause = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     isPlaying ? stopAudio() : playAudio(_id, uploadthingURL);
   };
 
   const handleDownload = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     if (!uploadthingURL) return;
 
     try {
@@ -137,6 +140,7 @@ export default function SoundCard({ sound }: SoundCardProps) {
 
   const handleAddToSoundboard = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setSheetOpen(true);
 
     if (isAddedToSoundboard) {
@@ -147,8 +151,9 @@ export default function SoundCard({ sound }: SoundCardProps) {
   };
 
   return (
-    <div
-      onClick={() => router.push(`/sounds/${slug}`)}
+    <Link
+      // onClick={() => router.push(`/sounds/${slug}`)}
+      href={`/sounds/${slug}`}
       className="bg-white rounded-xl cursor-pointer shadow-lg p-4 py-8 flex flex-col items-center justify-between border border-gray-200 hover:shadow-xl transition-all"
     >
       <div className="w-20 h-20 relative">
@@ -223,6 +228,6 @@ export default function SoundCard({ sound }: SoundCardProps) {
           )}
         </div>
       </TooltipProvider>
-    </div>
+    </Link>
   );
 }
