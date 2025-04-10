@@ -32,10 +32,12 @@ export default function HomePage() {
             InstantSoundboard - 400+ Sounds!
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
-            InstantSoundboard is your ultimate destination for the best sound
-            buttons, featuring meme soundboards, funny sound effects, gaming
-            sounds, and more. Browse and download from a massive collection of
-            free sound buttons.
+            Welcome to InstantSoundboard: Where Memes Speak Louder! Explore
+            thousands of the internet’s funniest, weirdest, and most viral sound
+            buttons all neatly organized by category. Play, download, or share
+            sound effects instantly from any device mobile, tablet, or desktop.
+            No sign-ups, no limits just click, play, and share. Download sound
+            effects and sound buttons for free . Start making noise now
           </p>
           {/* <SearchBar /> */}
         </div>
