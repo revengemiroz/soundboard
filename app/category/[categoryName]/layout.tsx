@@ -65,6 +65,28 @@ export function generateSEOMetadata(categoryName?: string): Metadata {
         "comedy audio",
         "lol soundboard",
       ];
+    case "memes":
+      title = "Meme soundboard: Meme soundboard sounds button";
+      description =
+        "Find the best meme sounds buttons in our Meme soundboard category. Listen, Share and Download the best funny sound buttons and hilarious meme sounds and viral sounds in InstantSoundboard";
+      keywords = [
+        "sound buttons",
+        "soundboard",
+        "memes sounds",
+        "free sounds",
+        "memes",
+        "instant sound buttons",
+        "sound buttons effect",
+        "sound board",
+        "instant soundboard",
+        "meme soundboard",
+        "discord soundboard",
+        "meme board sounds",
+        "sound effects button",
+        "viral sounds",
+        "funny sounds",
+        "meme sounds",
+      ];
       break;
 
     default:

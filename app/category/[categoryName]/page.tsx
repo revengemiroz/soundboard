@@ -55,7 +55,32 @@ export default function SoundsByCategoryPage() {
       case "nepali":
         return "Trending Nepali Meme Sounds for TikTok, Reels, and Memes";
       case "memes":
-        return "Hilarious meme sound clips to spice up your content";
+        return "Our Meme Soundboard contains all the funniest meme sounds and audio clips. Have any meme sounds you like, you will find a meme sound button right here.";
+      case "anime":
+        return "Epic anime sounds and iconic voice lines for fans";
+      case "movies":
+        return "Famous movie quotes and scenes in audio format";
+      case "music":
+        return "Short music clips, beats, and iconic audio samples";
+      case "sound-effects":
+        return "Useful sound effects for videos, streams, and fun";
+      case "discord":
+        return "Funny and trending Discord soundboard audio clips";
+      case "viral":
+        return "Sounds that went viral on TikTok, Reels, and YouTube";
+      case "tiktok":
+        return "Trending TikTok audio clips for your short videos";
+      default:
+        return `Explore authentic ${category} sound clips for your projects, videos, and creative content`;
+    }
+  };
+
+  const h1Title = () => {
+    switch (category) {
+      case "nepali":
+        return "Trending Nepali Meme Sounds for TikTok, Reels, and Memes";
+      case "memes":
+        return " soundboard: Meme soundboard sounds button";
       case "anime":
         return "Epic anime sounds and iconic voice lines for fans";
       case "movies":
@@ -87,7 +112,7 @@ export default function SoundsByCategoryPage() {
             </span>
             <span className="absolute -bottom-2 left-0 w-full h-3 bg-red-200 dark:bg-red-900/40 rounded-full -z-0 transform -rotate-1"></span>
           </span>{" "}
-          Sounds – Authentic Audio Clips
+          {h1Title()}
         </h1>
         <h2 className="text-slate-600 px-4 dark:text-slate-400 max-w-2xl mx-auto">
           {h2Test()}
