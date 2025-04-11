@@ -57,19 +57,24 @@ export default function SoundsByCategoryPage() {
       case "memes":
         return "Search and Discover the best meme sounds at InstantSoundboard. Download best meme sound effects buttons for you meme soundboard, Find best meme sounds at InstantSoundboard. Enjoy our large collection of funny sound effects. Play, Download and share with your friends and spread the laughter";
       case "anime":
-        return "Epic anime sounds and iconic voice lines for fans";
+        return "Our Anime Soundboard contains all the funniest anime sounds and audio clips. Have any anime sounds or funny anime audio clips you like, you will find an anime sound button right here. Search and Discover the best anime sounds buttons at InstantSoundboard Download the best anime sound buttons for your anime soundboard. Find best anime sounds at InstantSoundboard.";
       case "movies":
-        return "Famous movie quotes and scenes in audio format";
+        return "Our Movies Soundboard contains all the funniest movie sounds and audio clips. Have any movie sounds or funny movie audio clips you like, you will find a meme sound button right here. Search and Discover the best movie sounds buttons at InstantSoundboard. Download best movie sound buttons.";
       case "music":
-        return "Short music clips, beats, and iconic audio samples";
+        return "Search and Discover the best music sounds buttons at InstantSoundboard. Download the best music sound buttons for your music soundboard, Find best music sounds at InstantSoundboard. Enjoy our large collection of music sound buttons. Play, Download and share with your friends and spread laughter.";
       case "sound-effects":
-        return "Useful sound effects for videos, streams, and fun";
+        return "Search and Discover the best sound effect buttons at InstantSoundboard. Download best sound effect sound buttons for your soundboard, Find best sound effects right here at InstantSoundboard. Enjoy our large collection of funny sound effects. Play, Download and share with your friends and spread laughter.";
       case "discord":
-        return "Funny and trending Discord soundboard audio clips";
+        return "Search and Discover the best Discord sound buttons at InstantSoundboard. Download funny Discord sound buttons for your server. Find the best troll and meme sounds to use in voice chats. Enjoy our large collection of hilarious Discord sound effects. Play, Download and share with your friends and make your chats more fun.";
       case "viral":
-        return "Sounds that went viral on TikTok, Reels, and YouTube";
+        return "Search and Discover the best viral sound buttons at InstantSoundboard. Download trending sound effects, viral TikTok audios, and meme sounds that broke the internet. Enjoy our top-rated viral soundboard and share the laughs with friends!";
+
       case "tiktok":
-        return "Trending TikTok audio clips for your short videos";
+        return "Search and Discover the best TikTok sound buttons at InstantSoundboard. Download trending TikTok meme sounds, viral audios, and popular sound clips used by creators. Enjoy our huge TikTok soundboard collection. Play, Download and share your favorite TikTok sounds with friends!";
+
+      case "indian":
+        return "Search and Discover the best Indian sound buttons at InstantSoundboard. Download popular Indian meme sounds, dialogues and viral audio clips. Enjoy our collection of Bollywood, South Indian, and desi sound effects. Play, Download and share with your friends for maximum fun!";
+
       default:
         return `Explore authentic ${category} sound clips for your projects, videos, and creative content`;
     }
@@ -82,19 +87,25 @@ export default function SoundsByCategoryPage() {
       case "memes":
         return " soundboard: Meme soundboard sounds button";
       case "anime":
-        return "Epic anime sounds and iconic voice lines for fans";
+        return " Soundboard - Anime Soundboard Sound buttons";
       case "movies":
-        return "Famous movie quotes and scenes in audio format";
+        return " Soundboard - Movies Soundboard Sound buttons";
       case "music":
-        return "Short music clips, beats, and iconic audio samples";
+        return " Soundboard - Music Soundboard Sound Buttons";
       case "sound-effects":
-        return "Useful sound effects for videos, streams, and fun";
+        return "Soundboard - Sound effects Soundboard Sound Buttons";
       case "discord":
-        return "Funny and trending Discord soundboard audio clips";
+        return "Soundboard - Discord Soundboard Sound Buttons";
+
       case "viral":
-        return "Sounds that went viral on TikTok, Reels, and YouTube";
+        return "Soundboard - Viral Soundboard Sound Buttons";
+
       case "tiktok":
-        return "Trending TikTok audio clips for your short videos";
+        return "Soundboard - TikTok Soundboard Sound Buttons";
+
+      case "indian":
+        return "Soundboard - Indian Soundboard Sound Buttons";
+
       default:
         return `Explore authentic ${category} sound clips for your projects, videos, and creative content`;
     }
@@ -103,7 +114,7 @@ export default function SoundsByCategoryPage() {
   return (
     <div className="max-w-5xl mx-auto py-8">
       <div className="text-center mt-12 mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">
           <span className="relative">
             <span
               className={`capitalize bg-gradient-to-r ${gradient} bg-clip-text text-transparent relative z-10`}
